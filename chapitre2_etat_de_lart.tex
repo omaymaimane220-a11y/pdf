@@ -1,0 +1,1192 @@
+%============================================================
+%  CHAPITRE II — État de l'Art
+%  Développement d'un Firmware Générique, Modulaire et
+%  Configurable pour Appareils Télématiques
+%  Stagiaire : Ihssan OULGHAZI — Smart Automation Technologies
+%============================================================
+
+\chapter{État de l'Art et Fondements Techniques }
+
+%---- Sommaire local ----------------------------------------
+\section*{Sommaire}
+\begin{quote}
+\small
+\textbf{1} \hspace{1em} Introduction \dotfill \pageref{sec:intro_ch2}\\
+\textbf{2} \hspace{1em} Généralités sur les firmwares embarqués \dotfill \pageref{sec:generalites}\\
+\hspace{2.5em} 2.1 \hspace{0.5em} Définition d'un firmware \dotfill \pageref{subsec:def_fw}\\
+\hspace{2.5em} 2.2 \hspace{0.5em} Rôle du firmware dans un appareil télématique \dotfill \pageref{subsec:role_fw}\\
+\hspace{2.5em} 2.3 \hspace{0.5em} Firmware spécifique vs firmware générique \dotfill \pageref{subsec:specifique_vs_generique}\\
+\hspace{2.5em} 2.4 \hspace{0.5em} Enjeux de maintenabilité et d'évolutivité \dotfill \pageref{subsec:maintenabilite}\\
+\textbf{3} \hspace{1em} Plateforme ESP32-P4 et environnement ESP-IDF \dotfill \pageref{sec:esp32}\\
+\hspace{2.5em} 3.1 \hspace{0.5em} Présentation de l'ESP32-P4 \dotfill \pageref{subsec:esp32p4}\\
+\hspace{2.5em} 3.2 \hspace{0.5em} Mémoire, flash et partitionnement \dotfill \pageref{subsec:memoire}\\
+\hspace{2.5em} 3.3 \hspace{0.5em} NVS pour la configuration persistante \dotfill \pageref{subsec:nvs}\\
+\hspace{2.5em} 3.4 \hspace{0.5em} ESP-IDF comme framework de développement \dotfill \pageref{subsec:espidf}\\
+\hspace{2.5em} 3.5 \hspace{0.5em} Chaîne de compilation, structure et conventions \dotfill \pageref{subsec:toolchain}\\
+\textbf{4} \hspace{1em} Systèmes temps réel et FreeRTOS \dotfill \pageref{sec:freertos}\\
+\hspace{2.5em} 4.1 \hspace{0.5em} Notion de RTOS \dotfill \pageref{subsec:rtos}\\
+\hspace{2.5em} 4.2 \hspace{0.5em} Tâches, priorités et ordonnancement \dotfill \pageref{subsec:tasks}\\
+\hspace{2.5em} 4.3 \hspace{0.5em} Queues, timers et event groups \dotfill \pageref{subsec:sync}\\
+\hspace{2.5em} 4.4 \hspace{0.5em} Watchdog et supervision interne \dotfill \pageref{subsec:watchdog}\\
+\hspace{2.5em} 4.5 \hspace{0.5em} Contraintes mémoire et stack \dotfill \pageref{subsec:mem_stack}\\
+\textbf{5} \hspace{1em} Architectures logicielles embarquées modulaires \dotfill \pageref{sec:modularity}\\
+\hspace{2.5em} 5.1 \hspace{0.5em} Architecture en couches \dotfill \pageref{subsec:layers}\\
+\hspace{2.5em} 5.2 \hspace{0.5em} Séparation driver / service \dotfill \pageref{subsec:driver_service}\\
+\hspace{2.5em} 5.3 \hspace{0.5em} HAL — Hardware Abstraction Layer \dotfill \pageref{subsec:hal}\\
+\hspace{2.5em} 5.4 \hspace{0.5em} Interfaces de modules : init, start, stop, handle\_event \dotfill \pageref{subsec:interfaces}\\
+\hspace{2.5em} 5.5 \hspace{0.5em} Patterns event-driven et pub/sub \dotfill \pageref{subsec:eventdriven}\\
+\hspace{2.5em} 5.6 \hspace{0.5em} Pattern strategy pour la sélection runtime \dotfill \pageref{subsec:strategy}\\
+\textbf{6} \hspace{1em} Services fondamentaux d'un firmware télématique \dotfill \pageref{sec:services}\\
+\hspace{2.5em} 6.1 \hspace{0.5em} Gestion de la configuration \dotfill \pageref{subsec:config}\\
+\hspace{2.5em} 6.2 \hspace{0.5em} Stockage local et endurance flash \dotfill \pageref{subsec:stockage}\\
+\hspace{2.5em} 6.3 \hspace{0.5em} Ring buffer pour logs et données offline \dotfill \pageref{subsec:ringbuffer}\\
+\hspace{2.5em} 6.4 \hspace{0.5em} Logging structuré \dotfill \pageref{subsec:logging}\\
+\hspace{2.5em} 6.5 \hspace{0.5em} Power management \dotfill \pageref{subsec:power}\\
+\hspace{2.5em} 6.6 \hspace{0.5em} Diagnostic et télémétrie interne \dotfill \pageref{subsec:diag}\\
+\hspace{2.5em} 6.7 \hspace{0.5em} Gestion des erreurs et politiques d'incidents \dotfill \pageref{subsec:erreurs}\\
+\textbf{7} \hspace{1em} Communication et configurabilité protocolaire \dotfill \pageref{sec:comms}\\
+\hspace{2.5em} 7.1 \hspace{0.5em} Besoins de communication dans un appareil télématique \dotfill \pageref{subsec:besoin_comms}\\
+\hspace{2.5em} 7.2 \hspace{0.5em} Protocoles TCP, UDP et MQTT \dotfill \pageref{subsec:protocoles}\\
+\hspace{2.5em} 7.3 \hspace{0.5em} Interface CommsProvider \dotfill \pageref{subsec:commsprovider}\\
+\hspace{2.5em} 7.4 \hspace{0.5em} Sélection du protocole par configuration \dotfill \pageref{subsec:proto_select}\\
+\textbf{8} \hspace{1em} Tests et durcissement des firmwares embarqués \dotfill \pageref{sec:tests}\\
+\hspace{2.5em} 8.1 \hspace{0.5em} Tests unitaires \dotfill \pageref{subsec:unit_tests}\\
+\hspace{2.5em} 8.2 \hspace{0.5em} Tests d'intégration \dotfill \pageref{subsec:integration_tests}\\
+\hspace{2.5em} 8.3 \hspace{0.5em} Tests de reboot et de configuration corrompue \dotfill \pageref{subsec:reboot_tests}\\
+\hspace{2.5em} 8.4 \hspace{0.5em} Profiling RAM/stack \dotfill \pageref{subsec:profiling}\\
+\hspace{2.5em} 8.5 \hspace{0.5em} Release candidate et documentation \dotfill \pageref{subsec:release}\\
+\textbf{9} \hspace{1em} Conclusion \dotfill \pageref{sec:conclu_ch2}\\
+\end{quote}
+
+\newpage
+
+%============================================================
+\section{Introduction}
+\label{sec:intro_ch2}
+%============================================================
+Le développement d'un firmware générique, modulaire et configurable pour appareils télématiques embarqués mobilise plusieurs disciplines : systèmes temps réel, architecture logicielle embarquée, gestion de la persistance et protocoles IoT. Ce chapitre pose l'état des connaissances nécessaire pour comprendre les choix techniques du projet, en suivant l'architecture du firmware développé : notions fondamentales de firmware et enjeux de maintenabilité, plateforme ESP32-P4 et environnement ESP-IDF, programmation temps réel avec FreeRTOS, architecture logicielle modulaire (HAL et patrons de conception adaptés), les six services fondamentaux d'un firmware télématique, la communication protocolaire, et enfin les stratégies de test et de durcissement, avant une conclusion synthétisant les choix technologiques retenus.
+
+%============================================================
+\section{Généralités sur les firmwares embarqués}
+\label{sec:generalites}
+%============================================================
+
+%------------------------------------------------------------
+\subsection{Définition d'un firmware}
+\label{subsec:def_fw}
+%------------------------------------------------------------
+
+Le terme \textit{firmware} désigne le logiciel de bas niveau qui réside en
+mémoire non-volatile au sein d'un système électronique et qui prend en charge
+le contrôle direct du matériel sous-jacent. Contrairement aux logiciels
+applicatifs qui s'exécutent sur un système d'exploitation généraliste avec
+des couches d'abstraction multiples, le firmware est intrinsèquement lié à
+la plateforme matérielle sur laquelle il s'exécute : il initialise les
+périphériques, configure les horloges système, orchestre les interruptions
+et expose des services de plus haut niveau aux composants logiciels qui
+s'appuient sur lui.
+
+Dans les systèmes embarqués modernes, le firmware occupe une position
+architecturale intermédiaire entre le matériel brut et la logique applicative
+métier. Il est stocké dans une mémoire Flash interne ou externe, chargé au
+démarrage par un bootloader, et s'exécute directement depuis cette mémoire
+ou après copie partielle en RAM selon les besoins de performance. Sa mise à
+jour, historiquement délicate car nécessitant un accès physique à l'appareil,
+est aujourd'hui facilitée par les mécanismes de mise à jour Over-The-Air
+(OTA) qui permettent de déployer une nouvelle image firmware à distance, via
+le réseau cellulaire ou Wi-Fi.
+
+Un firmware embarqué bien conçu se distingue par trois propriétés
+fondamentales. La \textbf{fiabilité} est la première : le firmware doit
+fonctionner sans interruption non planifiée dans des conditions
+environnementales parfois sévères (vibrations, écarts de température,
+coupures d'alimentation brusques). La \textbf{déterminisme temporel} est
+la deuxième : les opérations critiques doivent s'exécuter dans des délais
+bornés et prévisibles, ce qui distingue le firmware des logiciels de bureau
+où une latence occasionnelle est acceptable. Enfin, la \textbf{frugalité
+en ressources} est la troisième : les microcontrôleurs embarqués disposent
+de quelques centaines de kilo-octets de RAM et d'un ou deux mégaoctets de
+Flash, imposant une gestion rigoureuse de chaque ressource allouée.
+
+%------------------------------------------------------------
+\subsection{Rôle du firmware dans un appareil télématique}
+\label{subsec:role_fw}
+
+Au sein d'un dispositif télématique embarqué dans un véhicule, le firmware
+assure un ensemble de tâches qui couvrent l'ensemble du cycle de vie de
+l'information, depuis sa captation jusqu'à son acheminement vers
+l'infrastructure distante.
+
+La première mission concerne la \textbf{collecte des données}. Le firmware
+interagit avec le module GNSS afin de récupérer les informations de
+position, sollicite les capteurs inertiels pour repérer les comportements de
+conduite (accélérations soudaines, freinages appuyés, virages serrés), et
+exploite les liaisons CAN Bus ou OBD-II pour relever des paramètres tels que
+le régime moteur, la vitesse, la consommation de carburant ou les codes
+d'anomalie.
+
+La deuxième mission porte sur le \textbf{prétraitement embarqué}. Avant toute
+communication vers l'extérieur, le firmware met en {\oe}uvre des opérations
+de nettoyage, d'identification d'événements et de regroupement des mesures
+brutes. Il établit une distinction entre les données nécessitant un envoi
+instantané, comme les alertes urgentes, et celles pouvant être consolidées
+dans des envois espacés afin de réduire la consommation en données mobiles.
+
+La troisième mission concerne le \textbf{pilotage de la liaison réseau}. Le
+firmware initie et maintient la connexion au réseau cellulaire, ouvre des
+sessions de communication via MQTT ou TCP vers les serveurs de la
+plateforme, et assure la reprise automatique en cas de coupure du signal.
+Une mémoire tampon locale conserve par ailleurs les données collectées
+durant les interruptions de réseau, évitant ainsi toute perte
+d'information.
+
+La quatrième mission, enfin, relève de la \textbf{surveillance interne du
+dispositif}. Le firmware contrôle en continu l'état de ses différents
+sous-systèmes : occupation de la pile des tâches, cohérence des paramètres
+enregistrés en mémoire non volatile, niveau de la batterie de secours, et
+fonctionnement des périphériques connectés. Lorsqu'une défaillance est
+repérée, des mécanismes de récupération adaptés sont déclenchés avant
+notification de la plateforme distante.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{figures/fw_responsibilities.png}
+    \caption{Responsabilités fonctionnelles d'un firmware télématique embarqué}
+    \label{fig:fw_responsibilities}
+\end{figure}
+
+L'articulation de ces quatre missions --- collecte des données,
+prétraitement embarqué, pilotage de la liaison réseau et surveillance
+interne --- ne constitue pas un simple inventaire de fonctions isolées,
+mais reflète l'organisation interne même du firmware développé. Comme le
+montre la Fig.~\ref{fig:fw_responsibilities}, chacune de ces responsabilités
+correspond à un bloc fonctionnel distinct gravitant autour du module central
+\emph{ESP32-P4 Firmware} : le bloc \emph{Acquisition et traitement} prend en
+charge la captation et le prétraitement des données issues du GNSS, de
+l'IMU et du bus véhicule ; le bloc \emph{Connectivité et sécurité} assure le
+pilotage de la liaison réseau via GSM/GPRS et MQTT ; le bloc \emph{Gestion
+système et services} implémente les mécanismes de surveillance interne
+(watchdog, power manager, health counters) ; et le bloc \emph{Logique de
+décision et alertes} exploite les données traitées pour générer les
+notifications transmises vers le serveur de fleet management. Cette
+correspondance directe entre les responsabilités fonctionnelles décrites et
+l'architecture représentée sur la figure illustre concrètement le rôle
+central que joue le firmware dans la chaîne de valeur d'un appareil
+télématique embarqué.
+
+
+
+%------------------------------------------------------------
+\subsection{Firmware spécifique versus firmware générique}
+\label{subsec:specifique_vs_generique}
+%------------------------------------------------------------
+
+L'approche traditionnelle de développement firmware consiste à produire un
+logiciel étroitement couplé à une configuration matérielle précise et à
+un cas d'usage déterminé. Cette approche dite \textbf{spécifique} présente
+l'avantage d'une optimisation maximale pour le scénario cible : le code
+est minimal, sans abstractions inutiles, et chaque ressource matérielle
+est exploitée au maximum de ses capacités. Elle est adaptée aux produits
+à volume élevé dont la configuration matérielle ne variera jamais.
+
+Cependant, pour un fabricant qui propose plusieurs variantes d'un même
+appareil télématique --- différant par leur module de connectivité, leur
+interface bus véhicule ou leur dotation en capteurs --- l'approche spécifique
+engendre une multiplication des bases de code. Chaque variante possède son
+propre firmware, développé et maintenu indépendamment. Les corrections de
+bogues doivent être reportées manuellement sur chaque variante, les nouvelles
+fonctionnalités doivent être re-développées autant de fois qu'il existe de
+variantes, et les tests de validation doivent être répétés sur l'ensemble
+du parc matériel. Le coût de maintenance croît linéairement avec le nombre
+de variantes, rendant rapidement l'approche ingérable.
+
+L'\textbf{approche générique} répond à cette problématique en concevant
+le firmware comme une plateforme logicielle commune, configurable à la
+compilation et à l'exécution pour s'adapter aux différentes variantes
+matérielles. Le principe central est de maximiser la réutilisation du code
+entre les variantes, en isolant les parties dépendantes du matériel dans
+des modules d'adaptation (la HAL) et en paramétrant les comportements
+variables via un système de configuration. Une seule base de code est ainsi
+maintenue, et les corrections bénéficient immédiatement à toutes les
+variantes.
+
+La contrepartie de l'approche générique est une complexité architecturale
+plus élevée. La conception des abstractions, des interfaces inter-modules
+et du système de configuration demande un investissement initial significatif.
+De plus, les abstractions introduisent un overhead en mémoire et en temps
+d'exécution, qui doit être évalué et maintenu dans des limites acceptables
+pour les microcontrôleurs contraints ciblés.
+\newpage
+La figure~\ref{fig:specific_vs_generic} illustre cette différence
+architecturale : à gauche, l'approche spécifique avec ses bases de code
+multiples liées chacune à un matériel précis ; à droite, l'approche
+générique fondée sur une base de code commune, une couche de configuration
+et une couche d'abstraction matérielle (HAL) permettant de dériver les
+différentes variantes du produit.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{figures/specific_vs_generic.png}
+    \caption{Comparaison entre approche firmware spécifique et approche générique}
+    \label{fig:specific_vs_generic}
+\end{figure}
+
+
+
+%------------------------------------------------------------
+\subsection{Enjeux de maintenabilité et d'évolutivité}
+\label{subsec:maintenabilite}
+%------------------------------------------------------------
+
+La maintenabilité et l'évolutivité d'un firmware embarqué sont des propriétés
+qui conditionnent directement le coût total de possession d'un produit sur
+son cycle de vie. Un firmware difficile à maintenir accumule progressivement
+une dette technique qui ralentit chaque évolution et augmente le risque
+d'introduction de régressions. Dans le domaine des appareils télématiques,
+où les déploiements sur le terrain peuvent atteindre plusieurs milliers
+d'unités et s'étendre sur cinq à dix ans, ces propriétés revêtent une
+importance stratégique.
+
+La \textbf{maintenabilité} d'un firmware est favorisée par plusieurs
+pratiques architecturales. La séparation des préoccupations (\textit garantit que chaque module a une responsabilité unique et bien
+délimitée, ce qui réduit la surface d'impact de toute modification. Les
+interfaces contractuelles entre modules permettent de remplacer une
+implémentation par une autre sans affecter les modules clients. La
+traçabilité des événements par un système de journalisation structuré
+facilite le diagnostic des comportements anormaux sur le terrain.
+
+L'\textbf{évolutivité} désigne la capacité du firmware à intégrer de
+nouvelles fonctionnalités ou à supporter de nouveaux matériels sans
+nécessiter une refonte architecturale. Elle est garantie par la conception
+d'interfaces d'extension ouvertes, par le recours à des mécanismes de
+découverte dynamique des modules présents (registre de capabilities) et
+par une gestion de la configuration qui accepte l'ajout de nouveaux
+paramètres sans invalider les configurations existantes.
+\newpage
+%============================================================
+\section{Plateforme ESP32-P4 et environnement ESP-IDF}
+\label{sec:esp32}
+%============================================================
+
+
+\subsection{Présentation de l'ESP32-P4 et justification du choix}
+\label{subsec:esp32p4}
+
+L'ESP32-P4 est un System-on-Chip (SoC) haute performance développé
+par Espressif Systems, conçu pour les applications IoT embarquées
+nécessitant une capacité de traitement élevée combinée à une gestion
+fine de l'énergie \cite{espressif_esp32p4}. Son choix dans le cadre
+du projet \textit{GlobalFleet} a été guidé par une analyse comparative
+avec les alternatives du marché, résumée dans le
+tableau~\ref{tab:soc_comparison}.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\caption{Comparaison des plateformes SoC candidates pour le projet \textit{GlobalFleet}}
+\label{tab:soc_comparison}
+\footnotesize
+\begin{tabular}{|p{3.2cm}|p{2.2cm}|p{2.2cm}|p{2.2cm}|p{2.4cm}|}
+\hline
+\rowcolor{gray!20}
+\textbf{Critère} & \textbf{ESP32-P4} & \textbf{STM32H7} & \textbf{ESP32-S3} & \textbf{Nordic nRF9160} \\
+\hline
+Cœurs processeur & \mbox{2×RISC-V} 400\,MHz & 1×Cortex-M7 480\,MHz & 2×Xtensa LX7 240\,MHz & 1×Cortex-M33 \\
+\hline
+SRAM interne & 768\,Ko & 1\,Mo & 512\,Ko & 256\,Ko \\
+\hline
+Coprocesseur LP & Oui (40\,MHz) & Non & Non & Non \\
+\hline
+Flash Encryption & Oui & Non natif & Oui & Non \\
+\hline
+Support OTA natif & Oui (dual-bank) & Manuel & Oui & Limité \\
+\hline
+Interfaces CAN & Oui (TWAI) & Oui (bxCAN) & Non & Non \\
+\hline
+Écosystème SDK & ESP-IDF (officiel) & STM32CubeIDE & ESP-IDF & nRF SDK \\
+\hline
+Coût unitaire estimé & Faible & Moyen-élevé & Faible & Élevé \\
+\hline
+\rowcolor{green!15}
+\textbf{Verdict} & \textbf{Retenu} & Non retenu & Écarté & Non retenu \\
+\hline
+\end{tabular}
+\end{table}
+
+L'ESP32-P4 a été retenu pour cinq raisons déterminantes. Premièrement,
+son \textbf{coprocesseur LP} (Low Power, 40\,MHz) permet de maintenir
+la surveillance des sources de réveil à une consommation inférieure
+à 5\,mA sans activer les cœurs RISC-V principaux, ce qui est critique
+pour les appareils alimentés sur batterie de secours. Deuxièmement,
+son \textbf{contrôleur TWAI natif} (compatible CAN 2.0B et CAN-FD)
+élimine la nécessité d'un transceiver externe pour l'interface J1939
+véhicule. Troisièmement, le mécanisme \textbf{OTA Dual-Bank} intégré
+dans l'ESP-IDF permet des mises à jour atomiques avec rollback
+automatique sans développement additionnel. Quatrièmement, la
+\textbf{Flash Encryption} et le \textbf{Secure Boot v2} répondent
+aux exigences de sécurité croissantes du secteur. Cinquièmement,
+l'\textbf{écosystème ESP-IDF mature} avec FreeRTOS SMP natif et une
+communauté active réduit le risque projet.
+\newpage
+Le STM32H7 a été écarté malgré ses performances brutes supérieures
+en raison de l'absence de coprocesseur LP natif et de l'écosystème
+OTA moins intégré. Le nRF9160, bien que performant pour les
+communications LTE-M, présente un coût unitaire prohibitif et ne
+supporte pas le CAN Bus natif.
+
+Au-delà des critères purement matériels résumés dans le tableau
+\ref{tab:soc_comparison}, le choix définitif de l'ESP32-P4 repose
+également sur la maturité et la cohérence de son environnement
+logiciel. Le framework ESP-IDF, construit autour de FreeRTOS avec
+support multi-cœur natif (SMP), fournit une couche d'abstraction
+matérielle homogène à travers les pilotes \textit{esp\_driver}, ce
+qui simplifie considérablement le portage du firmware entre
+différentes variantes de cartes basées sur la même famille de SoC.
+Cette abstraction concerne aussi bien les périphériques de
+communication (UART, SPI, I\textsuperscript{2}C, TWAI) que les
+modules de gestion d'énergie, ce qui réduit le volume de code
+spécifique à chaque révision matérielle.
+
+Par ailleurs, l'intégration native d'un gestionnaire de partitions
+Flash permet de séparer proprement le code applicatif, la
+configuration persistante stockée dans la partition NVS, et le
+système de fichiers embarqué basé sur LittleFS. Cette séparation
+facilite la maintenance à distance du parc de boîtiers et limite les
+risques de corruption de données lors des mises à jour OTA.
+L'écosystème ESP-IDF offre également des outils intégrés de
+diagnostic et de débogage (monitor série, core dump, analyse de
+piles), ce qui réduit le temps de mise au point lors des phases de
+développement et de validation sur le terrain.
+
+Enfin, sur le plan organisationnel, la disponibilité d'une
+documentation officielle complète, d'exemples de code maintenus par
+Espressif et d'une communauté open-source active constitue un
+facteur de réduction du risque projet non négligeable. Pour un
+projet comme \textit{GlobalFleet}, où plusieurs variantes matérielles
+(modules GPS, modems cellulaires, capteurs CAN, interfaces
+d'affichage) doivent pouvoir partager une base logicielle commune
+tout en conservant la possibilité de mises à jour différenciées par
+configuration, cette homogénéité de plateforme et d'outillage
+représente un avantage déterminant par rapport aux alternatives
+envisagées.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.50\textwidth]{figures/esp32p4.png}
+\caption{Microcontrôleur ESP32-P4 — plateforme cible retenue pour le firmware
+\textit{GlobalFleet}.
+\textit{Source : \cite{espressif_esp32p4}}}
+\label{fig:esp32p4_photo}
+\end{figure}
+Sur le plan architectural, l'ESP32-P4 intègre deux cœurs RISC-V
+haute performance (HP) cadencés jusqu'à 400\,MHz, accompagnés du
+coprocesseur LP fonctionnant indépendamment à 40\,MHz. La mémoire
+interne se compose de 768\,Ko de SRAM répartis entre les domaines HP
+et LP. La richesse des interfaces — UART, SPI, I\textsuperscript{2}C,
+CAN (TWAI), Ethernet MAC, USB-OTG — permet de connecter l'ensemble
+des périphériques d'un appareil télématique sans composant d'extension.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{figures/esp32p4_block.png}
+\caption{Diagramme bloc de l'ESP32-P4 et organisation de ses domaines d'alimentation.
+\textit{Source : \cite{espressif_esp32p4}}}
+\label{fig:esp32p4_block}
+\end{figure}
+
+\subsection{Mémoire, flash et partitionnement}
+\label{subsec:memoire}
+
+L'organisation de la mémoire Flash d'un système ESP32 est un aspect
+architectural fondamental qui conditionne la robustesse du firmware.
+ESP-IDF utilise un schéma de partitionnement flexible défini par une
+table stockée à une adresse fixe dans la Flash. Cette table décrit
+l'ensemble des régions et leur affectation, permettant de coexister
+plusieurs images firmware, une zone de configuration et des systèmes
+de fichiers sur le même composant Flash.
+
+Les partitions classiques d'un firmware ESP32 comprennent : une
+partition de bootloader à l'adresse 0x0000, la table de partitions
+à 0x8000, deux partitions OTA symétriques (OTA\_0
+ \newpage et OTA\_1), une
+partition NVS pour la configuration persistante, une partition SPIFFS
+ou LittleFS pour le système de fichiers embarqué, et optionnellement
+une partition factory pour les paramètres immuables de fabrication.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.70\textwidth]{figures/flash_partitions.png}
+\caption{Organisation typique des partitions Flash d'un firmware ESP32.
+\textit{Source : \cite{espidf_nvs}}}
+\label{fig:flash_partitions}
+\end{figure}
+
+Le mécanisme OTA repose sur le principe de la double banque : pendant
+que le firmware actuel s'exécute depuis OTA\_0, le nouveau firmware
+est téléchargé et écrit dans OTA\_1. Lorsque l'écriture est validée
+par vérification de signature, le bootloader est instructé de démarrer
+sur OTA\_1 au prochain redémarrage. En cas d'échec, le bootloader
+revient automatiquement sur la partition précédente.
+
+\subsection{NVS pour la configuration persistante}
+\label{subsec:nvs}
+
+Le système \textbf{NVS} (\textit{Non-Volatile Storage}) d'ESP-IDF est
+une bibliothèque de stockage clé-valeur conçue pour persister des
+paramètres de configuration dans la Flash interne \cite{espidf_nvs}.
+Elle répond à deux contraintes majeures : la durabilité face aux
+coupures d'alimentation et la longévité du composant Flash malgré
+des mises à jour fréquentes.
+
+Le NVS organise les données en \textit{namespaces}, espaces de noms
+logiques permettant à des modules indépendants de gérer leur propre
+espace sans risque de collision de clés. Chaque entrée est une paire
+clé-valeur où la clé est une chaîne de 15 caractères maximum et la
+valeur peut être un entier de 8 à 64 bits, une chaîne ou un blob
+binaire permettant de stocker des structures C complètes.
+
+Le NVS implémente un algorithme de \textit{wear leveling} par rotation
+des pages : chaque page est utilisée séquentiellement, et lorsqu'une
+page est pleine, ses entrées valides sont compactées vers une nouvelle
+page avant effacement de l'ancienne. La résistance aux coupures
+d'alimentation est assurée par l'écriture atomique de chaque entrée.
+
+\subsection{ESP-IDF comme framework de développement}
+\label{subsec:espidf}
+
+L'\textbf{ESP-IDF} (\textit{Espressif IoT Development Framework}) est
+le SDK officiel d'Espressif, qui constitue bien plus qu'un ensemble
+de bibliothèques périphériques \cite{espidf_github} : c'est un
+environnement complet intégrant le noyau FreeRTOS, une couche HAL
+structurée, un système de composants réutilisables, un système de
+configuration Kconfig, et les outils de compilation, flashage et
+débogage.
+
+L'architecture d'ESP-IDF est organisée en composants (\textit{components}),
+chacun constituant un module logiciel autonome avec ses propres
+sources, ses en-têtes publics et son fichier Kconfig. Les composants
+peuvent déclarer des dépendances explicites, ce qui permet au système
+de build CMake de construire automatiquement le graphe de dépendances
+et d'assurer la compilation dans le bon ordre. Cette organisation
+est directement réutilisée dans le firmware \textit{GlobalFleet}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{figures/espidf_archi.png}
+\caption{Architecture en composants d'ESP-IDF et intégration de FreeRTOS.
+\textit{Source : \cite{espidf_github}}}
+\label{fig:espidf_archi}
+\end{figure}
+\newpage
+ESP-IDF intègre une version enrichie de FreeRTOS supportant le mode
+SMP (\textit{Symmetric Multi-Processing}) sur les ESP32 à double cœur,
+permettant d'épingler une tâche sur un cœur spécifique via le paramètre
+\texttt{xCoreID} de \texttt{xTaskCreatePinnedToCore()}. Cette capacité
+est exploitée dans le firmware \textit{GlobalFleet} pour séparer les
+tâches de communication réseau (cœur 0) des tâches d'acquisition de
+données (cœur 1).
+
+\subsection{Chaîne de compilation, structure de projet et conventions}
+\label{subsec:toolchain}
+
+La chaîne de compilation d'ESP-IDF repose sur CMake comme système
+de build et sur une toolchain GCC RISC-V croisée fournie par Espressif.
+La structure d'un projet ESP-IDF suit des conventions précises : le
+répertoire racine contient \texttt{CMakeLists.txt}, le fichier
+\texttt{sdkconfig} généré par menuconfig, et le répertoire
+\texttt{main/} contenant le point d'entrée. Les composants
+additionnels résident dans \texttt{components/}.
+
+Le système \textbf{Kconfig} permet de définir des options de
+configuration hiérarchiques exposées dans le menu \texttt{idf.py
+menuconfig}. Ces options génèrent des macros préprocesseur dans
+\texttt{sdkconfig.h}, permettant d'inclure ou d'exclure
+conditionnellement des blocs de code à la compilation selon la
+configuration cible. Cette mécanique est au cœur du mécanisme de
+configurabilité à la compilation du firmware \textit{GlobalFleet}.
+
+%============================================================
+\section{Systèmes temps réel et FreeRTOS}
+\label{sec:freertos}
+%============================================================
+
+\subsection{Notion de RTOS et justification du choix}
+\label{subsec:rtos}
+
+Un système d'exploitation temps réel (RTOS) est un noyau logiciel
+conçu pour garantir que les contraintes temporelles d'un système
+embarqué sont respectées de manière déterministe et prévisible.
+La distinction fondamentale avec un OS généraliste ne réside pas dans
+la vitesse d'exécution, mais dans la \textbf{prévisibilité} : un RTOS
+garantit qu'une tâche de haute priorité sera activée dans un délai
+maximal borné après l'événement déclencheur \cite{freertos_official}.
+
+Cette garantie est réalisée grâce à un ordonnanceur préemptif à
+priorités fixes : dès qu'une tâche de priorité supérieure devient
+prête, l'ordonnanceur interrompt immédiatement la tâche en cours.
+On distingue le temps réel strict (\textit{hard real-time}), où tout
+dépassement de l'échéance est une défaillance inacceptable, du temps
+réel souple (\textit{soft real-time}), où des dépassements
+occasionnels sont tolérés. Dans le firmware \textit{GlobalFleet},
+la majorité des contraintes relèvent du temps réel souple.
+\newpage
+Le tableau~\ref{tab:rtos_comparison} présente la comparaison des
+RTOS candidats qui ont été évalués avant de retenir FreeRTOS.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\caption{Comparaison des RTOS candidats pour le projet \textit{GlobalFleet}}
+\label{tab:rtos_comparison}
+\footnotesize
+\begin{tabular}{|p{3.0cm}|p{2.3cm}|p{2.3cm}|p{2.3cm}|p{2.3cm}|}
+\hline
+\rowcolor{gray!20}
+\textbf{Critère} & \textbf{FreeRTOS} & \textbf{Zephyr} & \textbf{RTX (Azure)} & \textbf{ESP-IDF bare} \\
+\hline
+Intégration ESP-IDF & Native (officielle) & Partielle & Non & N/A \\
+\hline
+Support SMP dual-core & Oui (v10.5) & Oui & Non & Non \\
+\hline
+Empreinte mémoire & Très faible & Moyenne & Faible & Minimale \\
+\hline
+Licence & MIT & Apache 2.0 & MIT & — \\
+\hline
+Maturité industrielle & Très élevée & Élevée & Moyenne & — \\
+\hline
+Documentation & Complète \cite{freertos_book} & Complète & Limitée & — \\
+\hline
+\rowcolor{green!15}
+\textbf{Verdict} & \textbf{Retenu} & Non retenu & Non retenu & Non retenu \\
+\hline
+\end{tabular}
+\end{table}
+
+FreeRTOS a été retenu pour quatre raisons. Premièrement, son
+\textbf{intégration native dans ESP-IDF} élimine toute problématique
+de portage : l'environnement de développement Espressif livre FreeRTOS
+v10.5.1 préconfiguré et optimisé pour l'ESP32-P4. Deuxièmement, son
+\textbf{support SMP natif} permet d'exploiter les deux cœurs RISC-V
+de l'ESP32-P4 sans développement additionnel. Troisièmement, sa
+\textbf{très faible empreinte mémoire} (quelques dizaines de Ko)
+laisse le maximum de SRAM disponible pour les buffers applicatifs.
+Quatrièmement, sa \textbf{maturité industrielle} et sa documentation
+exhaustive réduisent le risque de comportements non documentés en
+production \cite{freertos_official}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.90\textwidth]{figures/rtos_preemption.png}
+\caption{Mécanisme de préemption dans un RTOS à priorités fixes.
+\textit{Source : adapté de \cite{freertos_book}}}
+\label{fig:rtos_preemption}
+\end{figure}
+
+\subsection{Tâches, priorités et ordonnancement}
+\label{subsec:tasks}
+
+La tâche (\textit{task}) est l'unité d'exécution fondamentale de
+FreeRTOS. Chaque tâche est une fonction C s'exécutant dans une boucle
+infinie, dotée de son propre contexte d'exécution comprenant une pile
+dédiée, une copie des registres du processeur et un bloc de contrôle
+(TCB). L'isolation des contextes garantit qu'une tâche ne peut pas
+corrompre accidentellement la pile d'une autre.
+
+Chaque tâche se voit attribuer une \textbf{priorité numérique} au
+moment de sa création. L'ordonnanceur sélectionne à chaque instant
+la tâche dans l'état \textit{Ready} ayant la priorité la plus haute.
+Si plusieurs tâches partagent la même priorité maximale, elles sont
+exécutées en tourniquet (\textit{Round-Robin}) par tranche de temps
+égale au quantum de l'ordonnanceur (\texttt{configTICK\_RATE\_HZ}
+= 1000\,Hz dans ESP-IDF, soit 1\,ms).
+
+Une tâche peut se trouver dans l'un de quatre états :
+\textbf{Running} (en cours d'exécution), \textbf{Ready} (prête,
+en attente de sélection), \textbf{Blocked} (en attente d'un
+événement, sans consommer de CPU) ou \textbf{Suspended} (mise en
+pause explicitement). Le passage de Blocked à Ready peut être
+déclenché par l'expiration d'un délai, la réception d'un message
+ou la libération d'un sémaphore \cite{freertos_book}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.90\textwidth]{figures/task_states.png}
+\caption{Diagramme d'états d'une tâche FreeRTOS.
+\textit{Source : adapté de \cite{freertos_book}}}
+\label{fig:task_states}
+\end{figure}
+
+\subsection{Queues, timers et event groups}
+\label{subsec:sync}
+
+FreeRTOS fournit un ensemble de primitives de synchronisation et de
+communication inter-tâches, conçues pour être thread-safe par nature
+et supportant l'utilisation depuis les routines d'interruption (ISR)
+via des variantes suffixées \texttt{FromISR} \cite{freertos_official}.
+
+La \textbf{file de messages} (\textit{queue}) implémente un tampon
+FIFO de capacité fixe, où chaque entrée est une copie de la donnée
+envoyée (pas un pointeur), garantissant la sûreté mémoire. Une tâche
+tentant de lire dans une file vide se bloque automatiquement pour
+le délai spécifié.
+
+Les \textbf{sémaphores} servent à la synchronisation d'événements et
+à la protection de ressources partagées. Le \textbf{mutex} est une
+variante augmentée d'un mécanisme d'héritage de priorité résolvant
+le problème classique d'inversion de priorité.
+
+Les \textbf{groupes d'événements} (\textit{Event Groups}) permettent
+à une tâche d'attendre simultanément plusieurs conditions logiques
+exprimées comme un masque de bits (opérateur ET ou OU logique). Dans
+le firmware \textit{GlobalFleet}, ils implémentent des barrières de
+synchronisation au démarrage.
+
+Les \textbf{timers logiciels} permettent d'exécuter des fonctions
+de rappel après un délai ou de façon périodique. Ils gèrent dans le
+firmware les envois périodiques de heartbeat et les rafraîchissements
+des compteurs de santé des modules.
+
+\subsection{Watchdog et supervision interne}
+\label{subsec:watchdog}
+
+Les mécanismes de watchdog sont essentiels à la robustesse d'un
+firmware embarqué déployé sur le terrain, où une intervention humaine
+en cas de blocage logiciel n'est pas envisageable. L'ESP32-P4 intègre
+deux watchdogs matériels indépendants \cite{espressif_esp32p4}.
+
+Le \textbf{TWDT} (\textit{Task Watchdog Timer}) surveille que chaque
+tâche supervisée effectue régulièrement son appel de rafraîchissement
+(\textit{kick}), détectant ainsi les blocages au niveau applicatif.
+L'\textbf{IWDT} (\textit{Interrupt Watchdog Timer}) surveille que
+l'ordonnanceur FreeRTOS n'est pas bloqué dans une interruption trop
+longtemps.
+\newpage
+Au-dessus des watchdogs matériels, le firmware \textit{GlobalFleet}
+implémente une supervision logicielle à deux niveaux : un système de
+\textbf{health counters} par module et un \textbf{watchdog logiciel
+applicatif} multi-tâches dans le composant \texttt{watchdog\_task}.
+
+\subsection{Contraintes mémoire et stack}
+\label{subsec:mem_stack}
+
+La gestion de la mémoire dans un firmware FreeRTOS embarqué est une
+contrainte permanente. Contrairement aux logiciels s'exécutant sur
+des systèmes avec mémoire virtuelle, un firmware embarqué dispose
+d'une quantité fixe et limitée de RAM. Un dépassement de pile
+(\textit{stack overflow}) ou une fragmentation excessive du tas
+peuvent conduire à des comportements indéfinis.
+
+Chaque tâche FreeRTOS se voit allouer une pile de taille fixe au
+moment de sa création. La fonction
+\texttt{uxTaskGetStackHighWaterMark()} retourne le nombre minimum
+de mots de pile jamais utilisés simultanément, permettant d'affiner
+les dimensionnements après des tests en conditions réelles.
+
+Dans le firmware \textit{GlobalFleet}, une politique de
+dimensionnement conservatrice est adoptée lors du développement, puis
+affinée par mesure systématique des watermarks en phase de test. Les
+allocations dynamiques de grande taille sont orientées vers la PSRAM
+externe via l'attribut \texttt{MALLOC\_CAP\_SPIRAM}, préservant la
+SRAM interne pour les allocations latence-critiques.
+
+%============================================================
+\section{Architectures logicielles embarquées modulaires}
+\label{sec:modularity}
+%============================================================
+
+\subsection{Architecture en couches}
+\label{subsec:layers}
+
+L'architecture logicielle en couches est le patron organisationnel
+le plus fondamental du génie logiciel embarqué. Son principe consiste
+à décomposer le logiciel en niveaux d'abstraction hiérarchiques
+superposés, chaque couche n'interagissant qu'avec les couches
+immédiatement adjacentes via des interfaces contractuelles définies.
+Cette règle d'interaction restreinte confère à l'architecture ses
+propriétés essentielles : portabilité, testabilité et maintenabilité.
+
+Dans le firmware \textit{GlobalFleet}, on identifie quatre couches
+superposées. La couche \textbf{matérielle} (BSP) expose les primitives
+bas niveau d'ESP-IDF et FreeRTOS. La couche \textbf{HAL \& Drivers}
+abstrait les périphériques physiques. La couche \textbf{Services Core}
+implémente les fonctionnalités transversales (configuration, stockage,
+journalisation, communication, gestion d'énergie). La couche
+\textbf{Applicative} contient la logique métier spécifique à chaque
+type d'appareil.
+\newpage
+Pour adapter le firmware à une nouvelle variante matérielle, seule
+la couche HAL doit être modifiée. Les services core et la logique
+applicative restent strictement inchangés.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.80\textwidth]{figures/layered_archi.png}
+\caption{Architecture en couches du firmware générique \textit{GlobalFleet}.
+\textit{Source : élaboration propre, inspirée de \cite{espidf_github}}}
+\label{fig:layered_archi}
+\end{figure}
+
+\noindent
+Pour adapter le firmware à une nouvelle variante matérielle, seule
+la couche HAL doit être modifiée. Les services core et la logique
+applicative restent strictement inchangés.
+
+\subsection{Séparation driver / service}
+\label{subsec:driver_service}
+
+La séparation entre le concept de \textbf{driver} et le concept de
+\textbf{service} est une distinction architecturale fondamentale dans
+un firmware modulaire. Un driver contrôle un périphérique matériel
+précis et expose des primitives d'entrée-sortie de bas niveau. Un
+service utilise un ou plusieurs drivers pour réaliser une fonction
+métier.
+
+Cette séparation présente plusieurs avantages : un driver peut être
+remplacé par un stub de test, un même service peut fonctionner avec
+différentes implémentations de drivers, et la responsabilité de chaque
+composant est clairement délimitée.
+
+\subsection{HAL — Hardware Abstraction Layer}
+\label{subsec:hal}
+
+La couche d'abstraction matérielle (HAL) est le mécanisme central
+permettant au firmware de fonctionner sur plusieurs variantes
+matérielles sans duplication du code. Elle définit des interfaces
+abstraites — typiquement des structures de pointeurs de fonctions
+en C — que chaque implémentation concrète doit satisfaire.
+
+Le principe de conception de la HAL repose sur l'inversion de
+dépendance : les modules de haut niveau dépendent d'abstractions
+et non d'implémentations concrètes. Dans le firmware
+\textit{GlobalFleet}, la HAL s'appuie sur les drivers ESP-IDF comme
+couche intermédiaire entre le matériel brut et les services, avec
+une surcouche supplémentaire pour permettre la substitution par des
+mocks lors des tests unitaires.
+
+\subsection{Interfaces de modules : init, start, stop, handle\_event}
+\label{subsec:interfaces}
+
+Chaque module du firmware \textit{GlobalFleet} implémente un contrat
+d'interface standardisé composé de quatre opérations fondamentales.
+
+L'opération \textbf{\texttt{init}} alloue les ressources statiques
+du module et enregistre les handlers d'événements auprès du bus
+d'événements central. L'opération \textbf{\texttt{start}} crée les
+tâches FreeRTOS du module. L'opération \textbf{\texttt{stop}} suspend
+proprement le fonctionnement du module sans détruire ses ressources.
+L'opération \textbf{\texttt{handle\_event}} reçoit et traite les
+événements publiés par d'autres modules via le bus d'événements.
+
+\subsection{Patterns event-driven et pub/sub}
+\label{subsec:eventdriven}
+
+L'architecture événementielle (\textit{event-driven architecture})
+est un paradigme où les modules ne s'invoquent pas directement mais
+communiquent en publiant et en s'abonnant à des événements via un
+médiateur central. Ce paradigme est particulièrement bien adapté aux
+systèmes embarqués temps réel car il découple naturellement les
+producteurs de données de leurs consommateurs.
+
+Dans le firmware \textit{GlobalFleet}, un composant \textbf{Event Bus}
+central implémente ce mécanisme. Chaque module peut publier des
+événements typés (\texttt{EVENT\_GNSS\_FIX\_ACQUIRED},
+\texttt{EVENT\_CAN\_ERROR\_DETECTED}, \texttt{EVENT\_POWER\_BATTERY\_LOW})
+et s'abonner aux types qui le concernent, sans que le producteur
+ait connaissance de l'identité des consommateurs.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.60\textwidth]{figures/event_bus.jpg}
+\caption{Architecture de l'Event Bus inter-modules du firmware
+\textit{GlobalFleet} — patron Publish-Subscribe sur 10 composants.
+\textit{Source : élaboration propre}}
+\label{fig:event_bus}
+\end{figure}
+
+\noindent
+L'implémentation de l'Event Bus dans un contexte FreeRTOS s'appuie
+sur une file de messages protégée par mutex. Une tâche de dispatching
+dédiée lit la file et appelle les callbacks des abonnés, garantissant
+que ces callbacks s'exécutent dans le contexte du dispatcher et non
+dans celui du producteur, évitant ainsi les problèmes de réentrance.
+
+\subsection{Pattern Strategy pour la sélection runtime}
+\label{subsec:strategy}
+
+Le patron de conception Stratégie (\textit{Strategy Pattern}) permet
+de définir une famille d'algorithmes interchangeables, d'encapsuler
+chacun et de les rendre substituables à l'exécution. En C embarqué,
+ce patron est implémenté via des tables de pointeurs de fonctions.
+
+Pour la couche de communication du firmware : selon la configuration
+lue au démarrage, le module de communication doit utiliser soit MQTT,
+soit TCP, soit UDP. Plutôt que de parsemer le code de branchements
+conditionnels, le patron Stratégie encapsule chaque protocole dans
+une structure \texttt{comms\_provider\_t} contenant des pointeurs vers
+les fonctions \texttt{connect}, \texttt{send}, \texttt{receive} et
+\texttt{disconnect}. Au démarrage, la stratégie appropriée est
+sélectionnée et injectée dans le module de communication.
+
+%============================================================
+\section{Services fondamentaux d'un firmware télématique}
+\label{sec:services}
+%============================================================
+
+\subsection{Gestion de la configuration}
+\label{subsec:config}
+
+Le module de gestion de la configuration constitue l'un des services
+les plus transversaux du firmware. Sa responsabilité est de fournir
+à tous les autres modules un accès unifié et sécurisé aux paramètres
+qui gouvernent leur comportement, en distinguant deux catégories selon
+leur nature et leur durée de vie.
+
+La \textbf{configuration factory} regroupe les paramètres définis une
+fois pour toutes à la fabrication : numéro de série, identifiant
+matériel, version du PCB, capacités hardware activées. Ces paramètres
+sont stockés dans une partition Flash protégée et ne doivent jamais
+être modifiables sur le terrain.
+
+La \textbf{configuration field} regroupe les paramètres ajustables
+lors du déploiement : paramètres réseau, intervalles de reporting,
+seuils d'événements, activation de fonctionnalités optionnelles.
+Ces paramètres sont stockés en NVS avec vérification d'intégrité
+par CRC-32 et numéro de version 16 bits \cite{espidf_nvs}.
+
+\subsection{Stockage local et endurance flash}
+\label{subsec:stockage}
+
+Le service de stockage local gère la persistance des données
+opérationnelles générées par le firmware. La contrainte d'endurance
+de la Flash (100\,000 à 300\,000 cycles d'effacement par secteur)
+impose un algorithme de \textit{wear leveling} applicatif distribuant
+les écritures sur l'ensemble de la partition allouée.
+
+\subsection{Ring buffer pour logs et données offline}
+\label{subsec:ringbuffer}
+
+Un tampon circulaire (\textit{ring buffer}) est une structure de
+données particulièrement bien adaptée au stockage temporaire de flux
+de données dans les systèmes embarqués à ressources limitées. Son
+principe repose sur une zone mémoire de taille fixe gérée avec deux
+pointeurs indépendants d'écriture et de lecture.
+
+Dans le firmware \textit{GlobalFleet}, le ring buffer est utilisé à
+deux niveaux : le stockage offline des données en l'absence de
+connectivité, et le tampon mémoire absorbant les rafales de messages
+de log sans bloquer les tâches productrices.
+
+\subsection{Logging structuré}
+\label{subsec:logging}
+
+Un système de journalisation robuste est indispensable au diagnostic
+d'un firmware déployé sur le terrain. La journalisation structurée
+produit des entrées de log formatées selon un schéma défini, incluant
+systématiquement un horodatage précis, le niveau de sévérité (DEBUG,
+INFO, WARNING, ERROR, CRITICAL), l'identifiant du module émetteur
+et le message structuré au format JSON.
+
+\subsection{Power management}
+\label{subsec:power}
+
+Le gestionnaire d'énergie du firmware implémente une machine à états
+avec plusieurs modes de fonctionnement distincts. Le mode
+\textbf{ACTIVE} correspond au fonctionnement nominal complet. Le mode
+\textbf{REDUCED} réduit la fréquence d'acquisition. Le mode
+\textbf{SLEEP} éteint la connectivité cellulaire et les périphériques
+non essentiels. Le mode \textbf{DEEP\_SLEEP} (Ultra-Pro uniquement)
+coupe tous les domaines HP pour atteindre une consommation inférieure
+à 2\,mA \cite{espressif_esp32p4}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.60\textwidth]{figures/power_fsm.png}
+    \caption{Machine à états du gestionnaire d'énergie du firmware \textit{GlobalFleet}. \textit{Source : élaboration propre}}
+    \label{fig:power_fsm}
+\end{figure}
+
+\subsection{Diagnostic et télémétrie interne}
+\label{subsec:diag}
+
+Le service de diagnostic assure la surveillance en temps réel de
+l'état de santé du firmware lui-même. Il collecte périodiquement :
+la mémoire heap libre par région, le watermark minimum de pile de
+chaque tâche critique, le temps de fonctionnement depuis le dernier
+démarrage, la cause du dernier reset, la qualité du signal cellulaire
+et la charge CPU moyenne. Ces métriques permettent de détecter une
+dégradation progressive avant qu'elle ne devienne critique.
+
+\subsection{Gestion des erreurs et politiques d'incidents}
+\label{subsec:erreurs}
+
+La gestion des erreurs dans un firmware destiné à fonctionner sans
+supervision humaine doit être à la fois systématique et graduée.
+Le firmware \textit{GlobalFleet} définit une hiérarchie de politiques
+d'incidents adaptées à la sévérité et à la récupérabilité des erreurs :
+journalisation pour les erreurs bénignes, redémarrage du module fautif
+avec backoff exponentiel pour les erreurs fonctionnelles, et reset
+complet du système pour les erreurs système critiques.
+
+%============================================================
+\section{Communication et configurabilité protocolaire}
+\label{sec:comms}
+%============================================================
+
+\subsection{Besoins de communication dans un appareil télématique}
+\label{subsec:besoin_comms}
+
+Les exigences sur le canal de communication sont multiples et parfois
+contradictoires. La \textbf{fiabilité de livraison} garantit que les
+données critiques sont transmises avec acquittement. L'\textbf{efficacité
+protocolaire} minimise les en-têtes et compresse les données pour
+réduire la consommation cellulaire. La \textbf{sécurité} protège
+les données en transit par chiffrement TLS et authentifie la source
+\cite{tls_rfc5246}.
+
+\subsection{Protocoles TCP, UDP et MQTT}
+\label{subsec:protocoles}
+
+Le protocole \textbf{TCP} est orienté connexion et garantit la
+livraison ordonnée et sans erreur de tous les octets transmis. Son
+overhead de connexion le rend moins adapté aux environnements cellulaires
+à latence variable.
+
+Le protocole \textbf{UDP} est sans connexion, avec overhead minimal,
+adapté aux flux de données périodiques où la perte occasionnelle d'un
+paquet est préférable à la latence des retransmissions TCP.
+
+\textbf{MQTT} (\textit{Message Queuing Telemetry Transport}) est un
+protocole applicatif publish/subscribe conçu spécifiquement pour les
+appareils IoT à ressources contraintes sur des réseaux à faible débit
+et haute latence \cite{mqtt_spec}\cite{mqtt_v5}. Il s'appuie sur
+TCP et introduit un broker central. Les niveaux QoS (0, 1 et 2)
+permettent d'ajuster le compromis entre overhead et garantie de
+livraison selon la criticité des données.
+
+\subsection{Interface CommsProvider}
+\label{subsec:commsprovider}
+
+L'interface \textbf{CommsProvider} encapsule toutes les opérations
+de communication réseau derrière un contrat uniforme, permettant
+aux modules consommateurs d'envoyer et de recevoir des données sans
+connaître le protocole sous-jacent. L'interface expose un ensemble
+minimal de primitives : \texttt{comms\_connect()},
+\texttt{comms\_publish(topic, data, len, qos)},
+\texttt{comms\_subscribe(topic, callback)},
+\texttt{comms\_disconnect()} et \texttt{comms\_get\_status()}.
+
+\subsection{Sélection du protocole par configuration}
+\label{subsec:proto_select}
+
+La sélection du protocole de communication effectivement utilisé à
+l'exécution est pilotée par un paramètre de la configuration field
+de l'appareil. Au démarrage, le module de communication lit ce
+paramètre et instancie la structure \texttt{comms\_provider\_t}
+correspondant à l'implémentation sélectionnée. Ce mécanisme permet
+de déployer le même binaire firmware sur des appareils destinés à
+différentes infrastructures serveur, en modifiant uniquement la
+configuration sans recompilation.
+
+%============================================================
+\section{Outils de développement et environnement Visual Studio Code}
+\label{sec:outils}
+%============================================================
+
+\subsection{Visual Studio Code et framework ESP-IDF}
+\label{subsec:vscode}
+
+L'environnement de développement retenu pour le projet
+\textit{GlobalFleet} est \textbf{Visual Studio Code} (VS~Code),
+utilisé comme éditeur de code associé au \textbf{framework officiel
+ESP-IDF} d'Espressif, exploité directement via son interface en ligne
+de commande. Ce choix s'inscrit dans une démarche de productivité et
+de cohérence avec les pratiques de l'équipe R\&D de Smart Automation
+Technologies, en privilégiant un environnement léger, sans dépendance
+à des extensions graphiques additionnelles.
+
+VS~Code offre une interface d'édition performante intégrant un
+terminal intégré, dans lequel les commandes \texttt{idf.py build},
+\texttt{idf.py flash} et \texttt{idf.py monitor} sont exécutées
+directement, sans basculer entre plusieurs fenêtres. Les
+fonctionnalités IntelliSense pour C/C++ natives de VS~Code, combinées
+à la configuration du \texttt{compile\_commands.json} généré par
+ESP-IDF, offrent une complétion de code précise sur l'ensemble des
+APIs \texttt{esp\_mqtt}, \texttt{nvs\_flash}, \texttt{esp\_ota\_ops}
+et des primitives FreeRTOS.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.80\textwidth]{figures/vscode_espidf.png}
+\caption{Environnement Visual Studio Code et terminal ESP-IDF —
+interface utilisée pour le développement du firmware \textit{GlobalFleet}.
+\textit{Source : capture d'écran du projet}}
+\label{fig:vscode_espidf}
+\end{figure}
+
+\noindent
+Le débogage applicatif a été assuré principalement par
+l'instrumentation logicielle (logs \texttt{ESP\_LOGx} et moniteur
+série \texttt{idf.py monitor}), permettant le suivi des tâches
+FreeRTOS, des transitions d'état et des codes d'erreur retournés par
+les APIs ESP-IDF, sans recourir à un débogueur matériel JTAG.
+
+\subsection{Comparaison et justification des outils retenus}
+\label{subsec:justif_outils}
+
+Le tableau~\ref{tab:tools_comparison} présente la comparaison des
+environnements de développement évalués avant de retenir VS~Code
+associé au framework ESP-IDF en ligne de commande.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\caption{Comparaison des environnements de développement candidats}
+\label{tab:tools_comparison}
+\footnotesize
+\begin{tabular}{|p{3.0cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.0cm}|}
+\hline
+\rowcolor{gray!20}
+\textbf{Critère} & \textbf{VS Code + ESP-IDF (CLI)} & \textbf{Eclipse + ESP-IDF} & \textbf{STM32CubeIDE} & \textbf{CLion} \\
+\hline
+Support ESP32-P4 natif & Officiel & Officiel & Non & Via CMake \\
+\hline
+Légèreté / performance & Très légère & Lourde & Lourde & Moyenne \\
+\hline
+Configuration requise & Minimale & Importante & Dédiée STM32 & CMake natif \\
+\hline
+Intégration Git & Intégrée & Partielle & Partielle & Complète \\
+\hline
+Débogage & Logs / moniteur série & Via OpenOCD & STLink uniquement & Via OpenOCD \\
+\hline
+Licence & Gratuite & Gratuite & Gratuite & Payante \\
+\hline
+\rowcolor{green!15}
+\textbf{Verdict} & \textbf{Retenu} & Non retenu & Non retenu & Non retenu \\
+\hline
+\end{tabular}
+\end{table}
+
+VS~Code associé au framework ESP-IDF en ligne de commande a été
+retenu face à Eclipse pour sa légèreté, sa simplicité de configuration
+et l'absence de surcharge logicielle sur des projets de grande taille
+comme \textit{GlobalFleet} (23 composants ESP-IDF). STM32CubeIDE a été
+écarté car il est exclusivement dédié aux microcontrôleurs STM32 et
+ne supporte pas la chaîne de compilation RISC-V ESP-IDF.
+CLion, bien qu'excellent pour les projets CMake, présente une licence
+commerciale payante non justifiée lorsque VS~Code offre des
+fonctionnalités équivalentes gratuitement.
+
+%============================================================
+\section{Tests et durcissement des firmwares embarqués}
+\label{sec:tests}
+%============================================================
+
+\subsection{Tests unitaires}
+\label{subsec:unit_tests}
+
+Les tests unitaires d'un firmware embarqué constituent le niveau de
+vérification le plus granulaire : chaque module ou fonction est testé
+de façon isolée, en substituant ses dépendances matérielles par des
+implémentations fictives (\textit{mocks}) simulant les comportements
+des périphériques. Cette approche permet d'exécuter les tests sur
+une machine de développement standard sans matériel cible,
+accélérant considérablement le cycle de développement.
+
+Dans ESP-IDF, le framework \textbf{Unity} est intégré nativement
+pour l'écriture et l'exécution de tests unitaires \cite{unity_testing}.
+Les dépendances matérielles sont remplacées par des mocks implémentant
+les mêmes interfaces HAL que les drivers réels. La couche HAL du
+firmware \textit{GlobalFleet} a été précisément conçue pour faciliter
+cette substitution.
+
+\medskip
+\noindent
+\textit Note concernant les tests matériels : les tests unitaires
+hors-cible du répertoire \texttt{test\_host/} et les tests
+d'intégration du répertoire \texttt{test/} ont été entièrement
+développés et validés au niveau logiciel. Les tests nécessitant
+l'accès au matériel physique ESP32-P4 (profiling de consommation
+réelle, validation JTAG, tests de débit CAN physique) n'ont pas pu
+être exécutés dans le cadre de ce stage car la carte de développement
+matérielle est en cours de finalisation par l'équipe Hardware de
+Smart Automation Technologies. Le code de test est prêt et sera
+exécuté dès la mise à disposition du matériel. Les résultats seront
+intégrés au rapport de la release candidate v1.0.
+
+\subsection{Tests d'intégration}
+\label{subsec:integration_tests}
+
+Les tests d'intégration vérifient le comportement correct du système
+lorsque plusieurs modules sont combinés, en validant notamment les
+interactions via l'Event Bus, les échanges de données entre les files
+de messages inter-tâches et le comportement correct des séquences
+de démarrage et d'arrêt ordonnés. Contrairement aux tests unitaires
+qui s'exécutent sur machine hôte, les tests d'intégration s'exécutent
+sur la cible réelle ou sur un émulateur, car ils impliquent les
+mécanismes FreeRTOS et les timings réels de l'ordonnanceur.
+
+\subsection{Tests de reboot et de configuration corrompue}
+\label{subsec:reboot_tests}
+
+Les tests de robustesse aux coupures d'alimentation et à la corruption
+de données consistent à interrompre le système pendant des opérations
+d'écriture en Flash, puis à vérifier que le firmware redémarre dans
+un état cohérent grâce aux mécanismes de vérification CRC et de
+configuration de repli.
+
+Des tests de corruption intentionnelle de la partition NVS via
+\texttt{esptool.py} permettent de valider le comportement du module
+de configuration en présence de données invalides : le firmware doit
+détecter la corruption, journaliser l'incident, basculer sur la
+configuration de repli et démarrer normalement sans bloquer ni entrer
+dans une boucle de reset infinie.
+
+\subsection{Profiling RAM/stack}
+\label{subsec:profiling}
+
+Le profiling de l'utilisation mémoire est une activité de validation
+indispensable avant tout déploiement en production. Pour les piles
+des tâches FreeRTOS, la fonction
+\texttt{uxTaskGetStackHighWaterMark()} retourne le nombre minimum
+de mots de pile jamais utilisés simultanément depuis la création de
+la tâche. Si ce watermark minimum est inférieur à une marge de
+sécurité définie (typiquement 30\,\% de la taille de pile allouée),
+la taille est augmentée. Pour le heap, la fonction
+\texttt{heap\_caps\_get\_minimum\_free\_size()} mesure le minimum
+historique de mémoire libre.
+
+\subsection{Release candidate et documentation}
+\label{subsec:release}
+
+La qualification d'une version firmware en tant que release candidate
+implique : zéro avertissement de compilation en mode strict
+\texttt{-Wall -Wextra}, 100\,\% des tests unitaires en succès,
+heap libre supérieur à 100\,Ko au régime pour toutes les variantes,
+marge de stack supérieure à 30\,\% pour toutes les tâches, et
+signature du binaire avec la clé privée de production. La
+documentation technique associée à chaque release candidate comprend
+les notes de version détaillant les changements, le rapport de tests
+avec les résultats de validation, et la procédure de mise à jour OTA
+\cite{unity_testing}.
+
+%============================================================
+\section{Conclusion}
+\label{sec:conclu_ch2}
+%============================================================
+
+Ce chapitre a posé les fondements théoriques et techniques du projet,
+en progressant des généralités sur le firmware vers la plateforme
+cible, puis vers les mécanismes temps réel et l'architecture logicielle.
+
+L'analyse comparative a justifié trois choix structurants : l'ESP32-P4
+(coprocesseur LP, TWAI CAN, OTA Dual-Bank, écosystème ESP-IDF mature),
+FreeRTOS (SMP natif, faible empreinte, maturité industrielle) et
+Visual Studio Code avec ESP-IDF .
+
+La valeur ajoutée du firmware \textit{GlobalFleet} repose sur trois
+contributions : un \textbf{registre de capacités 32 bits} persisté en
+NVS, couvrant trois variantes matérielles avec un seul binaire ; un
+\textbf{Event Bus Publish-Subscribe} garantissant un couplage nul entre
+modules ; et une \textbf{chaîne de récupération graduée} à quatre
+niveaux (WARNING → ERROR → CRITICAL → FATAL) assurant la continuité de
+service en déploiement distant.
+
+Ces principes — séparation en couches, HAL par inversion de
+dépendances, interface uniforme des modules, Event Bus pub/sub, patron
+Stratégie — forment la colonne vertébrale de l'architecture détaillée
+au chapitre~III.
