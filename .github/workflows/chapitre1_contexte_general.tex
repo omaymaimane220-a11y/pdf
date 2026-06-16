@@ -1,0 +1,413 @@
+
+\chapter{Contexte Général du Projet}
+\section*{Sommaire}
+\begin{quote}
+\small
+\textbf{1} \hspace{1em} Introduction \dotfill \pageref{sec:intro_ch1}\\
+\textbf{2} \hspace{1em} Présentation de l'organisme d'accueil \dotfill \pageref{sec:entreprise}\\
+\textbf{3} \hspace{1em} Présentation du projet \dotfill \pageref{sec:projet}\\
+\hspace{2.5em} 3.1 \hspace{0.5em} Contexte du projet \dotfill \pageref{subsec:contexte}\\
+\hspace{2.5em} 3.2 \hspace{0.5em} Problématique \dotfill \pageref{subsec:problematique}\\
+\hspace{2.5em} 3.3 \hspace{0.5em} Objectifs du projet \dotfill \pageref{subsec:objectifs}\\
+\hspace{2.5em} 3.4 \hspace{0.5em} Périmètre du projet \dotfill \pageref{subsec:perimetre}\\
+\hspace{2.5em} 3.5 \hspace{0.5em} Outil \dotfill \pageref{subsec:qqoqcp}\\
+\textbf{4} \hspace{1em} Organisation et planification du stage \dotfill \pageref{sec:organisation}\\
+\hspace{2.5em} 4.1 \hspace{0.5em} Méthodologie de travail \dotfill \pageref{subsec:methodo}\\
+\hspace{2.5em} 4.2 \hspace{0.5em} Planning général \dotfill \pageref{subsec:planning}\\
+\hspace{2.5em} 4.3 \hspace{0.5em} Livrables attendus \dotfill \pageref{subsec:livrables}\\
+\textbf{5} \hspace{1em} Conclusion \dotfill \pageref{sec:conclu_ch1}\\
+\end{quote}
+
+\newpage
+
+% ------------------------------------------------------------
+\section{Introduction}
+\label{sec:intro_ch1}
+
+Dans un contexte industriel où les systèmes embarqués communicants
+occupent une place de plus en plus centrale dans la gestion des flottes
+de véhicules et la collecte de données terrain, la conception d'un
+firmware robuste, générique et maintenable représente un enjeu
+stratégique majeur pour les entreprises du secteur télématique. C'est
+précisément dans ce contexte que s'inscrit le présent projet de fin
+d'études, réalisé au sein de Smart Automation Technologies ,
+entreprise marocaine spécialisée dans les solutions embarquées et
+l'intelligence artificielle appliquée. Ce premier chapitre a pour
+objectif de poser les bases conceptuelles et organisationnelles
+indispensables à la compréhension globale du travail accompli. Il
+présente successivement l'entreprise d'accueil, la problématique
+technique qui a motivé ce stage, les objectifs fixés, le périmètre
+du projet, ainsi que la méthodologie et la planification adoptées
+tout au long des vingt semaines de développement.
+
+% ------------------------------------------------------------
+\section{Présentation de l'organisme d'accueil}
+\label{sec:entreprise}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.35\textwidth]{figures/logo_SAT.jpeg}
+    \caption{Logo de Smart Automation Technologies}
+    \label{fig:logo_sat}
+\end{figure}
+
+Smart Automation Technologies (SAT) est une entreprise marocaine de
+technologie basée à Tanger, fondée par un groupe de consultants seniors
+aux profils pluridisciplinaires couvrant les systèmes d'information,
+la science des données et l'intelligence artificielle embarquée.
+Depuis sa création, SAT s'est positionnée comme un partenaire
+technologique de référence pour les entreprises et administrations
+cherchant à moderniser leurs systèmes d'information et à intégrer des
+solutions intelligentes dans leurs processus opérationnels. L'entreprise
+se distingue par une approche orientée résultats, qui privilégie la
+compréhension approfondie des besoins métier de ses clients avant toute
+proposition de solution technique. Cette démarche lui permet de livrer
+des systèmes réellement adaptés aux contraintes opérationnelles,
+budgétaires et humaines de chaque organisation. SAT intervient aussi
+bien dans la conception initiale de systèmes complexes que dans leur
+évolution, leur maintenance et leur optimisation sur le long terme,
+assurant ainsi une relation de partenariat durable avec ses clients.
+
+\paragraph{Domaines d'activité.}
+Les activités de SAT s'articulent autour de quatre pôles technologiques
+complémentaires. Le premier pôle concerne le développement de systèmes
+embarqués et IoT, où l'entreprise conçoit des firmwares sur mesure, des
+cartes électroniques dédiées et des solutions de connectivité pour des
+applications industrielles, automobiles et de mobilité urbaine. Le
+deuxième pôle porte sur l'intelligence artificielle et la science des
+données, avec le développement de modèles prédictifs, d'algorithmes de
+traitement en temps réel et de solutions d'analyse à grande échelle
+déployées sur des plateformes cloud et edge. Le troisième pôle recouvre
+le conseil et la gouvernance IT, incluant l'assistance à maîtrise
+d'ouvrage, l'audit d'architecture logicielle et le benchmarking de
+systèmes d'information. Enfin, le quatrième pôle est dédié au support
+et à la formation, avec des programmes ciblés sur les outils et
+technologies déployés chez les clients, garantissant une montée en
+compétences progressive et durable des équipes.
+
+\paragraph{Positionnement et valeurs.}
+La vision stratégique de SAT repose sur trois piliers fondamentaux :
+l'innovation technologique continue, la relation de proximité avec ses
+clients et la valorisation du capital humain. L'entreprise cultive une
+culture interne axée sur l'excellence technique, l'intégrité dans les
+engagements pris, l'esprit d'équipe et l'engagement envers la qualité
+des livrables. Ces valeurs, illustrées dans la
+figure~\ref{fig:valeurs}, se traduisent concrètement dans les pratiques
+quotidiennes : revues de code régulières, encadrement des stagiaires,
+veille technologique active et participation à des projets de recherche
+appliquée en partenariat avec des universités marocaines.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\textwidth]{figures/valeurs_sat.jpeg}
+    \caption{Valeurs fondamentales de Smart Automation Technologies}
+    \label{fig:valeurs}
+\end{figure}
+
+\paragraph{Intérêt du projet firmware pour l'entreprise.}
+Dans le domaine des systèmes embarqués et de la télématique, SAT
+développe une gamme d'appareils déployés dans des flottes de véhicules
+pour la collecte, le traitement et la transmission de données de
+localisation, de diagnostic moteur et d'état des véhicules. Face à la
+diversité croissante de ses références matérielles et à la complexité
+grandissante de leur maintenance logicielle respective, SAT a identifié
+la nécessité stratégique de disposer d'un firmware commun, générique
+et configurable capable de couvrir l'ensemble de la gamme. Ce projet
+de fin d'études répond directement à cet enjeu en proposant une
+architecture unifiée, réduisant la dette technique accumulée et
+accélérant les cycles de développement des futures variantes produits.
+
+% ------------------------------------------------------------
+\section{Présentation du projet}
+\label{sec:projet}
+
+\subsection{Contexte du projet}
+\label{subsec:contexte}
+
+La gamme d'appareils télématiques de SAT comprend plusieurs références
+matérielles qui, bien que partageant un socle technologique commun basé
+sur le microcontrôleur ESP32-P4, présentent des spécificités
+fonctionnelles propres à chaque produit. Ces différences se manifestent
+à plusieurs niveaux : interfaces périphériques distinctes selon les
+variantes (GPS, GSM/LTE, accéléromètre, bus CAN, entrées/sorties
+numériques), protocoles de communication variés selon les cas d'usage
+(MQTT over TLS, HTTP, CAN/J1939), et exigences de gestion d'énergie
+différentes selon que l'appareil est alimenté en permanence sur le
+réseau de bord du véhicule ou sur batterie autonome. À ces contraintes
+matérielles s'ajoutent des exigences systèmes sévères inhérentes aux
+environnements embarqués communicants : ressources mémoire limitées
+(quelques mégaoctets de RAM et de Flash), contraintes temps réel
+strictes sur les tâches critiques (acquisition GPS, publication MQTT,
+gestion de l'état d'énergie), et obligation de maintenance à distance
+via des mécanismes de configuration runtime et de diagnostic sans
+intervention physique sur les véhicules du parc déployé. Face à cette
+diversité, l'équipe R\&D de SAT se retrouvait jusqu'ici contrainte de
+maintenir autant de bases de code distinctes qu'il existe de variantes
+produits, engendrant une dette technique croissante, des risques de
+régression lors des mises à jour de sécurité et un allongement
+significatif des cycles de mise sur le marché de nouveaux produits.
+
+\subsection{Problématique}
+\label{subsec:problematique}
+
+La problématique centrale de ce projet émerge naturellement du constat
+décrit ci-dessus. Maintenir des bases de code fragmentées pour chaque
+variante matérielle est une approche qui atteint rapidement ses limites
+à mesure que le nombre de produits croît et que les exigences de
+sécurité et de fiabilité se durcissent. La question fondamentale à
+laquelle ce projet cherche à répondre est la suivante :
+
+\begin{quote}
+\textit{Comment concevoir un firmware générique, modulaire et
+configurable, capable de s'adapter à plusieurs configurations
+matérielles et logicielles d'appareils télématiques, tout en
+garantissant fiabilité, maintenabilité et évolutivité ?}
+\end{quote}
+
+Cette problématique soulève plusieurs défis techniques interdépendants
+qui structurent l'ensemble de la démarche de conception. Le premier
+défi concerne la généricité et la configurabilité : il s'agit
+d'abstraire suffisamment les différences matérielles entre variantes
+pour qu'un seul binaire puisse couvrir toute la gamme en s'appuyant
+sur un registre de capacités 32 bits et une couche HAL bien définie.
+Le deuxième défi porte sur la modularité : l'architecture doit
+permettre l'ajout d'un nouveau module (capteur, protocole, service)
+sans perturber les modules existants ni nécessiter de recompilation
+globale. Le troisième défi concerne la concurrence et la gestion des
+ressources sous FreeRTOS, où des dizaines de tâches aux priorités
+hétérogènes doivent cohabiter dans un espace mémoire contraint tout
+en respectant les budgets RAM et Stack de chaque composant. Enfin,
+le quatrième défi touche à la sécurité et à la maintenance à distance,
+avec l'intégration de mécanismes de mise à jour firmware Over-The-Air
+sécurisés via TLS et de journalisation structurée permettant le
+diagnostic à distance du parc déployé.
+
+\subsection{Objectifs du projet}
+\label{subsec:objectifs}
+
+L'objectif principal de ce projet est de concevoir, implémenter et
+valider une architecture firmware générique, modulaire et configurable
+pour les appareils télématiques de SAT, basée sur l'ESP32-P4 sous
+FreeRTOS et ESP-IDF v5.3.1, et livrable sous la forme d'une base de
+code pérenne, documentée et immédiatement exploitable par l'équipe
+R\&D. Pour atteindre cet objectif, plusieurs objectifs spécifiques
+ont été définis et servent de jalons mesurables tout au long du
+développement. Le premier objectif consiste à définir un modèle de
+capacités matérielles et un modèle de configuration runtime permettant
+à un seul binaire de s'adapter à n'importe quelle variante de la gamme
+par simple lecture d'un registre persistant en NVS au démarrage. Le
+deuxième objectif porte sur la mise en place d'une machine d'états
+système hiérarchique à cinq états (\texttt{INIT}, \texttt{RUN},
+\texttt{SLEEP}, \texttt{FAULT}, \texttt{UPDATE}) pilotant le cycle
+de vie complet du firmware de manière déterministe et récupérable.
+Les objectifs suivants couvrent l'implémentation des services core
+--- configuration, stockage NVS, journalisation structurée, gestion
+d'énergie et diagnostic interne --- ainsi que la création d'une
+architecture modulaire avec HAL standardisé permettant l'ajout de
+drivers par un développeur tiers sans risque de régression. Enfin,
+les objectifs de validation comprennent la rédaction de tests
+unitaires et d'intégration, le profilage RAM/Stack sur cible réelle
+et la production d'une documentation technique de transfert.
+
+\subsection{Périmètre du projet}
+\label{subsec:perimetre}
+
+\paragraph{Périmètre fonctionnel.}
+Le projet couvre la conception et l'implémentation d'une architecture
+firmware unifiée pour les trois variantes de la gamme SAT : Basic
+(GPS uniquement), Pro (GPS, CAN, OTA, MQTT, Logger, Power avancé) et
+Ultra Pro (toutes les fonctionnalités activées). Chaque variante est
+définie par un registre de capacités 32 bits persisté en NVS, lu au
+démarrage par le système d'initialisation pour configurer dynamiquement
+les services et drivers à activer.
+
+\paragraph{Périmètre firmware.}
+Le développement porte sur les quatre couches de l'architecture :
+HAL (abstraction matérielle), Drivers (implémentations concrètes des
+périphériques), Services (logique applicative découplée) et Application
+(orchestration globale et machine à états). L'ensemble est développé
+sous ESP-IDF v5.3.1 avec FreeRTOS sur la plateforme ESP32-P4, en
+utilisant Espressif-IDE sous Windows comme environnement de
+développement principal.
+
+\paragraph{Périmètre configuration et diagnostic.}
+Les mécanismes de persistance NVS, de configuration runtime, de
+journalisation structurée avec niveaux de sévérité et de diagnostic
+interne sont inclus dans le périmètre. Le protocole de communication
+UART avec le module de gestion OTA/MQTT développé par le collègue
+spécialiste est également défini et implémenté côté firmware.
+
+\paragraph{Limites du projet.}
+Le développement du serveur OTA backend et de la plateforme MQTT
+cloud est hors périmètre, ces composants étant pris en charge par
+un collègue spécialiste en charge de l'infrastructure serveur. La
+portabilité vers d'autres microcontrôleurs constitue une perspective
+future et non un livrable de ce stage.
+
+\subsection{Outil QQOQCP}
+\label{subsec:qqoqcp}
+
+L'outil QQOQCP (\textit{Qui~? Quoi~? Où~? Quand~? Comment~?
+Pourquoi~?}) permet de synthétiser de manière structurée les aspects
+essentiels du projet. Le tableau~\ref{tab:qqoqcp} ci-dessous présente
+cette analyse synthétique, facilitant la compréhension du contexte
+et des enjeux du projet Globalfleet.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.6}
+    \caption{Outil QQOQCP du projet Globalfleet}
+    \label{tab:qqoqcp}
+    \begin{tabular}{|p{2cm}|p{10.5cm}|}
+        \hline
+        \rowcolor{gray!20}
+        \textbf{Question} & \textbf{Réponse} \\
+        \hline
+        \textbf{Qui ?} &
+        OULGHAZI Ihssane --- Stagiaire PFE Master Systèmes Embarqués
+        et Robotique, FSTH, encadrée par M.~Jabir El Aaraj (SAT) et
+        M.~Badr Benamrou (encadrant académique). \\
+        \hline
+        \textbf{Quoi ?} &
+        Développement d'un firmware générique, modulaire et
+        configurable pour microcontrôleur ESP32-P4 sous FreeRTOS,
+        couvrant l'ensemble de la gamme d'appareils télématiques
+        de SAT via une architecture en couches (HAL, Drivers,
+        Services, Application), un Event Bus, un Ring Buffer et
+        des services critiques (NVS, Power Management, MQTT/TLS). \\
+        \hline
+        \textbf{Où ?} &
+        Smart Automation Technologies (SAT) --- Tanger, Maroc. \\
+        \hline
+        \textbf{Quand ?} &
+        De Mars 2026 à Juillet 2026 (stage PFE de 6 mois). \\
+        \hline
+        \textbf{Comment ?} &
+        \begin{itemize}[noitemsep, topsep=0pt, leftmargin=*]
+            \item Audit et analyse critique des bases de code
+                  firmware existantes.
+            \item Conception de l'architecture modulaire en couches
+                  sur ESP32-P4.
+            \item Implémentation sous ESP-IDF v5.3.1 avec
+                  Espressif-IDE, Git et CI/CD.
+            \item Tests unitaires (pytest) et tests d'intégration
+                  MQTT sur cible réelle.
+            \item Profilage mémoire (heap monitor, stack watermark
+                  FreeRTOS).
+            \item Développement et validation sur les trois
+                  variantes : Basic, Pro, Ultra Pro.
+        \end{itemize} \\
+        \hline
+        \textbf{Pourquoi ?} &
+        Résorber la dette technique de SAT en centralisant le code
+        source de la gamme télématique dans un dépôt Git unifié,
+        accélérer la mise sur le marché de nouveaux produits et
+        disposer d'une plateforme firmware sécurisée, extensible
+        et documentée à long terme. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% ------------------------------------------------------------
+\section{Organisation et planification du stage}
+\label{sec:organisation}
+
+\subsection{Méthodologie de travail}
+\label{subsec:methodo}
+
+La méthodologie adoptée pour ce projet s'appuie sur une approche
+progressive par phases, conçue pour s'adapter aux contraintes
+spécifiques du développement firmware embarqué, où les décisions
+d'architecture de bas niveau peuvent remettre en question des choix
+effectués en phase amont. Plutôt que d'adopter une méthodologie Agile
+stricte avec des sprints formalisés, l'approche retenue privilégie un
+développement incrémental du noyau firmware avec validation
+systématique de chaque module sur cible réelle avant toute intégration
+dans l'architecture globale. Cette discipline de validation précoce
+permet de détecter au plus tôt les problèmes de timing, de consommation
+mémoire ou d'interférence entre tâches FreeRTOS, qui sont nettement
+plus coûteux à corriger en phase d'intégration tardive. La gestion
+de version est assurée via Git avec une chaîne CI de compilation
+automatique permettant de vérifier en continu que l'ensemble des
+22 composants ESP-IDF compile sans erreur après chaque modification.
+Des points de revue réguliers avec l'encadrant professionnel permettent
+de valider les livrables de chaque phase et d'ajuster les priorités
+en fonction des contraintes techniques découvertes sur le terrain.
+
+\subsection{Planning général}
+\label{subsec:planning}
+
+Le diagramme de Gantt présenté dans la figure~\ref{fig:gantt} illustre
+la décomposition chronologique du projet en cinq phases principales,
+s'étalant sur vingt semaines de stage. Le tableau~\ref{tab:planning}
+synthétise ces phases avec leurs durées indicatives et leurs livrables
+principaux.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.4}
+    \caption{Planning synthétique du projet Globalfleet}
+    \label{tab:planning}
+    \begin{tabular}{|c|p{3.8cm}|p{3cm}|p{5cm}|}
+        \hline
+        \rowcolor{gray!20}
+        \textbf{Phase} & \textbf{Intitulé} & \textbf{Durée} &
+        \textbf{Livrables principaux} \\
+        \hline
+        1 & Étude du matériel et cadrage architecture
+          & Semaines 1 – 3
+          & Rapport d'analyse, choix technologiques documentés \\
+        \hline
+        2 & Squelette noyau RTOS
+          & Semaines 3 – 6
+          & Event Bus, Ring Buffer, gestion d'erreurs, CI compile \\
+        \hline
+        3 & Services core du firmware
+          & Semaines 6 – 11
+          & Config NVS, Storage, Logger, Power Manager, Diagnostic \\
+        \hline
+        4 & Modularité et intégration
+          & Semaines 11 – 15
+          & HAL complet, sélecteur de protocole, machine à états \\
+        \hline
+        5 & Tests, durcissement et documentation
+          & Semaines 15 – 20
+          & Rapport de tests, profilage RAM/Stack, documentation \\
+        \hline
+    \end{tabular}
+\end{table}
+Figure 1.3 présente le diagramme de Gantt actualisé du projet de stage, comparant l'avancement réel aux jalons initialement planifiés. Comme illustré dans la Fig. 1.3, les Phases 1 à 4 (S1 à S13), couvrant l'étude du matériel, le squelette du noyau RTOS, les services core du firmware ainsi que la modularité et l'intégration, sont entièrement achevées  de même que la tâche S14 relative aux tests unitaires et d'intégration. Seules les tâches S15 (profiling RAM/stack et release candidate) et S16 (préparation du transfert et documentation finale), encore en cours, ont été replanifiées sur la période du 3 au 7 juillet 2026. Cette représentation graphique met en évidence une avance d'environ un mois par rapport au calendrier prévisionnel initial, qui prévoyait l'achèvement de l'ensemble du projet à la fin du mois de juillet 2026.
+\begin{figure}[H]
+    \centering
+
+\includegraphics[width=\textwidth]{figures/gantt.png}
+    \caption{Diagramme de Gantt du projet Globalfleet}
+    \label{fig:gantt}
+\end{figure}
+
+\subsection{Livrables attendus}
+\label{subsec:livrables}
+
+L'ensemble des livrables du projet Globalfleet peut être regroupé en
+cinq catégories cohérentes avec les phases de développement. Les
+livrables d'architecture comprennent le document d'architecture
+firmware, la table des capacités et de configuration, ainsi que la
+spécification de la machine d'états système à cinq états. Les
+livrables d'infrastructure incluent le dépôt Git opérationnel avec
+CI de compilation, l'Event Bus avec son interface module standardisée
+et le catalogue exhaustif des codes d'erreurs du système. Les
+livrables de services core couvrent les modules Config, Storage,
+Logger, Power Manager et Diagnostic, entièrement implémentés, testés
+et documentés avec leurs interfaces publiques. Les livrables
+d'extensibilité comprennent le HAL complet avec son guide d'ajout
+de driver et le sélecteur de protocole runtime permettant de basculer
+dynamiquement entre les protocoles de communication disponibles.
+Enfin, les livrables de validation et de documentation incluent le
+rapport de tests unitaires et d'intégration, le rapport de profilage
+RAM/Stack mesuré sur cible ESP32-P4 réelle, et la documentation
+technique finale de transfert à destination de l'équipe R\&D de SAT.
+
+% ------------------------------------------------------------
+\section{Conclusion}
+\label{sec:conclu_ch1}
+Ce premier chapitre a permis de poser le cadre du projet : présentation de Smart Automation Technologies, exposé de la problématique — concevoir une architecture firmware générique, modulaire et configurable, adaptée à plusieurs variantes matérielles tout en garantissant performances temps réel, maintenabilité et sécurité — ainsi que la définition du périmètre, des objectifs et des livrables attendus. Le Chapitre 2 présentera l'état de l'art des technologies mobilisées (ESP32-P4, FreeRTOS, architectures modulaires HAL/Event-Driven/Services, protocoles de communication et sécurité) sur lesquelles s'appuie la solution développée.
