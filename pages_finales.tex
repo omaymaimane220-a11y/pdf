@@ -1,0 +1,210 @@
+% ============================================================
+%  1. DÉDICACES
+% ============================================================
+\chapter*{Dédicaces}
+\addcontentsline{toc}{chapter}{Dédicaces}
+\vspace*{2.5cm}
+\begin{flushright}
+\itshape\large
+À l'âme de mon père et de mon oncle,\\[0.5em]
+qui ont toujours cru en moi et rêvé de ce jour.\\
+Que Dieu leur accorde Sa miséricorde\\
+et les accueille en Son vaste paradis.\\[2em]
+
+À ma mère,\\[0.5em]
+dont le soutien indéfectible, les sacrifices silencieux\\
+et l'amour sans condition ont été ma plus grande force.\\[2em]
+
+À mes sœurs,\\[0.5em]
+pour leur présence et leurs encouragements\\
+dans les moments les plus difficiles.\\[2em]
+
+À mes amies et amis,\\[0.5em]
+en particulier \textbf{Safaa},\\
+et à tous ceux qui ont partagé avec moi\\
+ces années d'études, de doutes et de persévérance.\\[2em]
+
+À tous mes enseignants,\\[0.5em]
+qui ont façonné ma curiosité intellectuelle\\
+et m'ont transmis la rigueur\\
+indispensable à tout ingénieur.\\[2em]
+
+\textit{Je vous dédie ce travail.}
+\end{flushright}
+\vspace*{\fill}
+\newpage
+
+% ============================================================
+%  2. REMERCIEMENTS
+% ============================================================
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+Je tiens tout d'abord à exprimer ma gratitude envers mon \textbf{encadrant académique, M. Badr Benamrou}, pour sa confiance, ses conseils avisés et la rigueur scientifique qu'il m'a transmise tout au long de ce projet. Sa disponibilité et son engagement ont été déterminants dans la réussite de ce travail.
+
+Je tiens également à remercier \textbf{M. Abdellah Azmani} pour m'avoir offert l'opportunité de réaliser ce stage au sein de son entreprise, \textbf{Smart Automation Technologies}. Je le remercie chaleureusement pour son encouragement et ses précieux conseils.
+
+Je remercie également \textbf{M. Jabir El Aaraj}, mon encadrant professionnel chez Smart Automation Technologies, pour son encadrement technique de haut niveau, ses orientations et les nombreuses heures consacrées aux revues de code et aux discussions techniques qui ont profondément enrichi ce projet.
+
+Je remercie tout le corps professoral de la FST, en particulier le \textbf{chef de filière, M. Nabil Akchioui}, pour m'avoir assuré une formation solide.
+
+Je suis profondément reconnaissant à l'ensemble de \textbf{l'équipe de Smart Automation Technologies} pour leur accueil chaleureux, leur esprit de collaboration et l'environnement de travail stimulant qu'ils ont su créer.
+
+Mes remerciements vont également au \textbf{jury} qui a bien voulu consacrer son temps à l'évaluation de ce travail.
+
+Enfin, je ne saurais clore ces remerciements sans exprimer toute ma reconnaissance à \textbf{ma famille} --- ma mère, mes sœurs --- et à mes \textbf{ami(e)s}, en particulier \textbf{Safaa}, pour leur soutien moral constant et leur affection tout au long de ces années.
+
+\begin{flushright}
+\textit{OULGHAZI Ihssan}
+\end{flushright}
+\newpage
+
+% ============================================================
+%  3. ملخص (Arabic Abstract)
+% ============================================================
+\newpage
+\addcontentsline{toc}{chapter}{Résumé Arabe}  %
+\begin{otherlanguage}{arabic}
+
+\begin{center}
+\textbf{\large ملخص}
+\end{center}
+
+\vspace{0.3cm}
+\setlength{\parskip}{0.3cm}
+\setlength{\parindent}{1cm}
+
+يتناول هذا المشروع تصميم وتطوير \textbf{نواة برمجية} \en{(Firmware Kernel)} عامة، معيارية، وقابلة للإعداد، مخصصة لسلسلة أجهزة تتبع \en{(Basic, Pro, Ultra Pro)} تابعة لشركة \en{Smart Automation Technologies}. يعتمد هذا العمل البرمجي على نظام التشغيل الفوري \en{FreeRTOS} وإطار العمل \en{ESP-IDF}، بهدف استبدال الحلول البرمجية المجزأة ببنية موحدة تعتمد على "التكوين في وقت التشغيل" \en{(Runtime Configuration)}.
+
+يرتكز العمل على تصميم \textbf{معمارية متعددة الطبقات} \en{(Layered Architecture)} تفصل بين العتاد \en{(HAL)} والمنطق البرمجي \en{(Business Logic)}، مع التركيز على تطوير خدمات النواة الأساسية مثل: نظام إدارة الأحداث \en{(Event Bus)}، إدارة الطاقة \en{(Power Management)}، نظام إدارة التخزين \en{(Storage API)}، ونظام التشخيص الذاتي \en{(Internal Diagnostics)}. كما يتضمن المشروع تنفيذ استراتيجيات متقدمة للبرمجة مثل "نمط الاستراتيجية" \en{(Strategy Pattern)} لاختيار بروتوكولات الاتصال ديناميكياً، والتكامل مع نظام التحديث عن بُعد (OTA) المطوَّر من طرف الفريق المختص، مع آلية Dual-Bank .
+
+يهدف هذا المشروع إلى تطوير بنية برمجية عامة ومرنة، تتيح للشركة إدارة أجهزة مختلفة (من البسيطة إلى الاحترافية) عبر ملف  واحد \en{(Single Binary)}، مما يقلل من الديون التقنية، يسهل الصيانة، ويضمن أداءً مستقراً وموثوقاً في بيئات السيارات القاسية.
+
+\vspace{0.3cm}
+\noindent\textbf{الكلمات المفتاحية:}
+\en{Firmware Development}،
+\en{FreeRTOS}،
+\en{ESP-IDF}،
+معمارية البرمجيات،
+\en{HAL}،
+أنظمة الأحداث،
+\en{FOTA}،
+إدارة التخزين،
+البرمجة المعيارية.
+
+\end{otherlanguage}
+\newpage
+
+% ============================================================
+%  4. ABSTRACT
+% ============================================================
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+\noindent
+This project addresses the design and development of a \textbf{generic, modular and configurable firmware kernel} for a range of tracking devices (Basic, Pro, Ultra Pro) by Smart Automation Technologies, built on the \textbf{ESP32-P4} microcontroller under \textbf{FreeRTOS} and \textbf{ESP-IDF}, with the goal of replacing fragmented codebases with a unified architecture based on \textbf{Runtime Configuration}.
+
+\medskip\noindent
+The work focuses on designing a \textbf{layered architecture} separating hardware (HAL) from business logic, with core services including: Event Bus, Power Management, Storage API, and Internal Diagnostics. The project also implements advanced patterns such as the \textbf{Strategy Pattern} for dynamic protocol selection, and integrates with the \textbf{OTA} firmware update system developed by the dedicated specialist, with \textbf{Dual-Bank} support to ensure system continuity --- all in strict compliance with embedded programming standards.
+
+\medskip\noindent
+The goal is to develop a \textbf{generic and flexible firmware architecture} that allows the company to manage different devices (from basic to professional) via a \textbf{Single Binary}, reducing technical debt, simplifying maintenance, and ensuring stable and reliable performance in harsh automotive environments.
+
+\bigskip\noindent
+\textbf{Keywords:} Firmware Development, FreeRTOS, ESP-IDF, Software Architecture, HAL, Event Systems, OTA, Storage Management, Modular Programming.
+\newpage
+
+% ============================================================
+%  5. RÉSUMÉ
+% ============================================================
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+
+\noindent
+Ce projet porte sur la conception et le développement d'un \textbf{noyau
+logiciel générique, modulaire et configurable} pour une gamme d'appareils
+de suivi (Basic, Pro, Ultra Pro) de Smart Automation Technologies,
+reposant sur le microcontrôleur \textbf{ESP32-P4} sous \textbf{FreeRTOS}
+et \textbf{ESP-IDF}, dans le but de remplacer les solutions logicielles
+fragmentées par une architecture unifiée basée sur la
+\textbf{configuration à l'exécution}.
+
+\medskip\noindent
+Le travail se concentre sur la conception d'une \textbf{architecture en
+couches} séparant le matériel (HAL) de la logique applicative, avec des
+services essentiels tels que~: Event Bus, Power Management, Storage API
+et Internal Diagnostics. Le projet met également en œuvre des patrons de
+conception avancés comme le \textbf{Strategy Pattern} pour la sélection
+dynamique des protocoles de communication, et s'intègre avec le système
+de mise à jour \textbf{OTA} développé par le spécialiste dédié, avec
+support \textbf{Dual-Bank} pour garantir la continuité du système ---
+le tout en stricte conformité avec les règles de programmation embarquée.
+
+\medskip\noindent
+L'objectif est de développer une \textbf{architecture logicielle générique
+et flexible} permettant à l'entreprise de gérer différents appareils (du
+basique au professionnel) via un \textbf{Single Binary}, réduisant la
+dette technique, simplifiant la maintenance et garantissant des
+performances stables et fiables dans les environnements automobiles
+exigeants.
+
+\bigskip\noindent
+\textbf{Mots-clés :} Développement firmware, FreeRTOS, ESP-IDF,
+Architecture logicielle, HAL, Systèmes d'événements, OTA,
+Gestion du stockage, Programmation modulaire.
+\newpage
+% ============================================================
+%  6. TABLE DES ACRONYMES
+% ============================================================
+\chapter*{Table des acronymes}
+\addcontentsline{toc}{chapter}{Table des acronymes}
+
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.22}
+\noindent
+\begin{longtable}{p{1.75cm}p{5.85cm}p{1.75cm}p{5.85cm}}
+\hline
+\textbf{Sigle} & \textbf{Signification} & \textbf{Sigle} & \textbf{Signification}\\
+\hline
+\endfirsthead
+\hline
+\textbf{Sigle} & \textbf{Signification} & \textbf{Sigle} & \textbf{Signification}\\
+\hline
+\endhead
+\hline
+\endfoot
+
+ADC      & Analog-to-Digital Converter        & LP      & Low-Power (domaine ESP32-P4)\\
+API      & Application Programming Interface   & LTE     & Long-Term Evolution (4G)\\
+BSP      & Board Support Package               & LWT     & Last Will and Testament (MQTT)\\
+CAN      & Controller Area Network             & MEMS    & Micro-Electro-Mechanical Systems\\
+CI/CD    & Continuous Integration/Deployment   & ML      & Machine Learning\\
+CoAP     & Constrained Application Protocol    & MQTT    & Message Queuing Telemetry Transport\\
+CRC      & Cyclic Redundancy Check             & NB-IoT  & Narrowband IoT\\
+DTC      & Diagnostic Trouble Code             & NMEA    & National Marine Electronics Assoc.\\
+eFuse    & Electrically programmable Fuse       & NVS     & Non-Volatile Storage\\
+ESP-IDF  & Espressif IoT Development Framework & OBD-II  & On-Board Diagnostics version II\\
+FDS      & Functional Design Specification      & OTA     & Over-The-Air\\
+FIFO     & First In, First Out                  & PKI     & Public Key Infrastructure\\
+Flash    & Mémoire non volatile NOR Flash       & PSRAM   & Pseudo-Static RAM\\
+FOTA     & Firmware Over-The-Air               & QoS     & Quality of Service\\
+FPU      & Floating-Point Unit                  & R\&D    & Recherche et Développement\\
+FreeRTOS & Free Real-Time Operating System      & RISC-V  & Reduced Instruction Set Computer V\\
+FSM      & Finite State Machine                 & RPM     & Rotations Par Minute\\
+GNSS     & Global Navigation Satellite System   & RTOS    & Real-Time Operating System\\
+GPIO     & General Purpose Input/Output         & RTC     & Real-Time Clock\\
+GPS      & Global Positioning System            & SAT     & Smart Automation Technologies\\
+GSM      & Global System for Mobile Comm.       & SDIO    & Secure Digital Input Output\\
+HAL      & Hardware Abstraction Layer           & SMP     & Symmetric Multi-Processing\\
+HIDS     & Host-based Intrusion Detection       & SoC     & System on Chip\\
+HP       & High-Performance (ESP32-P4)          & SPI     & Serial Peripheral Interface\\
+HTTP     & Hypertext Transfer Protocol          & SPIFFS  & SPI Flash File System\\
+HTTPS    & HTTP Secure                          & TLM     & Télématique --- gamme SAT\\
+I$^2$C   & Inter-Integrated Circuit             & TLS     & Transport Layer Security\\
+I$^2$S   & Inter-IC Sound                       & TWAI    & Two-Wire Automotive Interface\\
+IoT      & Internet of Things                   & UART    & Universal Async. Receiver-Transmitter\\
+ISR      & Interrupt Service Routine            & USB     & Universal Serial Bus\\
+J1939    & Protocole CAN véhicules industriels  & USB-OTG & USB On-The-Go\\
+JTAG     & Joint Test Action Group              & X.509   & Standard certificats PKI\\
+\end{longtable}
+\newpage

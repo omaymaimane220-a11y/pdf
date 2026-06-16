@@ -1,0 +1,120 @@
+\documentclass[12pt, a4paper, oneside]{book}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{french}
+\setotherlanguage{arabic}
+\setotherlanguage{english}
+\setmainfont{Times New Roman}
+
+\usepackage{bidi}
+
+\newfontfamily\arabicfont[Script=Arabic]{Arial}
+\newcommand{\en}[1]{\textenglish{#1}}
+
+% ============================================================
+%  MISE EN PAGE
+% ============================================================
+\usepackage{geometry}
+\geometry{a4paper, left=3cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+% ============================================================
+%  PACKAGES GÉNÉRAUX
+% ============================================================
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{placeins}
+\usepackage[table]{xcolor}
+\definecolor{myblue}{RGB}{25, 45, 160}
+\usepackage{enumitem}
+\usepackage{emptypage}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{fontawesome5}
+%\faDice is already defined by fontawesome5, no need to redefine it
+%\usepackage{minted}
+
+% ============================================================
+%  TIKZ
+% ============================================================
+\usepackage{tikz}
+\usetikzlibrary{fit, shapes.geometric, positioning, backgrounds}
+
+% ============================================================
+%  FANCYHDR
+% ============================================================
+\usepackage{fancyhdr}
+
+\fancypagestyle{frontstyle}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+}
+
+\fancypagestyle{mainstyle}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+}
+
+% ============================================================
+%  BIBLATEX (avant hyperref)
+% ============================================================
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+\addbibresource{bib.bib}
+
+% ============================================================
+%  HYPERREF (toujours en dernier)
+% ============================================================
+\usepackage[colorlinks=true,
+            linkcolor=myblue,
+            urlcolor=myblue,
+            citecolor=myblue,
+            linktocpage=true]{hyperref}
+
+\makeatletter
+\pdfstringdefDisableCommands{%
+    \let\addcontentsline\@gobblethree
+}
+\makeatother
+
+% ============================================================
+%  DOCUMENT
+% ============================================================
+\begin{document}
+\sloppy
+
+% --- Partie préliminaire ---
+\frontmatter
+\pagestyle{frontstyle}
+\include{pages_finales}
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+%\listoffigures
+%\listoftables
+
+% --- Partie principale ---
+\mainmatter
+\pagestyle{mainstyle}
+\setcounter{page}{1}
+
+\include{introduction}
+%\include{chapetrs/chapitre1_contexte_general}
+%\FloatBarrier
+%\include{chapetrs/chapitre2_etat_de_lart}
+%\FloatBarrier
+%\include{chapetrs/chapitre3_analyse_conception}
+%\FloatBarrier
+%\include{chapetrs/chapitre4_implementation_validation-3}
+%\FloatBarrier
+%\include{chapetrs/chapitre5}
+\FloatBarrier
+\include{conclusion}
+
+% --- Annexes et bibliographie ---
+\appendix
+%\printbibliography[title={Bibliographie et Webographie}]
+%\include{annex}
+
+\end{document}

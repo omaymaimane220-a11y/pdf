@@ -1,0 +1,8 @@
+%============================================================
+% CONCLUSION GÉNÉRALE
+%============================================================
+\chapter*{Conclusion générale}
+\addcontentsline{toc}{chapter}{Conclusion générale}
+\markboth{Conclusion générale}{Conclusion générale}
+
+Ce stage de seize semaines au sein de Smart Automation Technologies a abouti au développement du firmware générique et modulaire \textbf{GlobalFleet} pour appareils télématiques, basé sur l'ESP32-P4 sous ESP-IDF et FreeRTOS. Structuré en cinq couches avec un bus d'événements Publish-Subscribe, ce projet introduit un \textbf{modèle de capacités} innovant (registre 32 bits en NVS) permettant de gérer trois variantes de produits (\textit{Basic}, \textit{Pro}, \textit{Ultra-Pro}) avec un seul binaire, optimisant ainsi les coûts de maintenance, l'agilité commerciale et le support terrain de l'entreprise. L'implémentation de six modules core (dont une configuration persistante et un gestionnaire d'erreurs gradué) a permis de surmonter des défis techniques majeurs tels que la corruption de la NVS, l'instabilité de SPIFFS (résolue par LittleFS), les conflits de gestion d'énergie avec le module MQTT et le dimensionnement des stacks FreeRTOS. Validée par des tests unitaires et d'intégration, cette architecture robuste pose des fondations solides pour les perspectives futures de l'entreprise, notamment l'intégration complète du GNSS/LTE, le déploiement de mises à jour FOTA sécurisées, le renforcement cyber (Secure Boot/Flash Encryption), l'optimisation énergétique avancée en mode sommeil, et la portabilité du firmware vers d'autres puces comme l'ESP32-S3 ou C6.
